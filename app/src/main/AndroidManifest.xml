@@ -10,12 +10,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Taskmaster">
         <activity
+            android:name=".Settings"
+            android:exported="false" />
+        <activity
+            android:name=".TaskDetail"
+            android:exported="false" />
+        <activity
             android:name=".AllTask"
             android:exported="false" />
         <activity
             android:name=".AddTask"
             android:exported="false" />
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
