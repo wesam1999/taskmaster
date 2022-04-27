@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Taskmaster</string>
+    <string name="action_settings">action_settings</string>
+    <string name="action_copyright">action_copyright</string>
+    <string name="action_TaskDetail">action_TaskDetail</string>
+    <string name="action_Settings">action_Settings</string>
 </resources>
