@@ -18,6 +18,7 @@ public class AllTask extends AppCompatActivity {
 
         setContentView(R.layout.activity_all_task);
     }
+
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:

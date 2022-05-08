@@ -4,4 +4,6 @@
     <string name="action_copyright">action_copyright</string>
     <string name="action_TaskDetail">action_TaskDetail</string>
     <string name="action_Settings">action_Settings</string>
+    <string name="action_mainpage">action_mainpage</string>
+    <string name="mainPage">mainPage</string>
 </resources>

@@ -15,6 +15,7 @@ import android.widget.Toast;
 public class Settings extends AppCompatActivity {
 
     public static final String ADDRESS = "address";
+    public static String address;
     private Button button;
     private EditText editText;
 
@@ -33,9 +34,9 @@ public class Settings extends AppCompatActivity {
 
         editText = findViewById(R.id.editTextTextPersonName3);
         button = findViewById(R.id.button4);
-        button.setOnClickListener(view->{
+        button.setOnClickListener(view -> {
 
-                saveAddress();
+            saveAddress();
 
 
         });
@@ -43,8 +44,8 @@ public class Settings extends AppCompatActivity {
 
     private void saveAddress() {
 
-        String username=editText.getText().toString();
-        SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(this);
+        String username = editText.getText().toString();
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor preferenceEditor = sharedPreferences.edit();
 
 
@@ -53,6 +54,7 @@ public class Settings extends AppCompatActivity {
         Toast.makeText(this, "username is Saved", Toast.LENGTH_SHORT).show();
 
     }
+
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:

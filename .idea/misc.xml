@@ -8,7 +8,10 @@
         <entry key="..\:/Users/iaz/AndroidStudioProjects/Taskmaster/app/src/main/res/layout/activity_main.xml" value="0.22" />
         <entry key="..\:/Users/iaz/AndroidStudioProjects/Taskmaster/app/src/main/res/layout/activity_settings.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/iaz/AndroidStudioProjects/Taskmaster/app/src/main/res/layout/activity_task_detail.xml" value="0.25" />
+        <entry key="..\:/Users/iaz/AndroidStudioProjects/Taskmaster/app/src/main/res/layout/activity_task_model.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/iaz/AndroidStudioProjects/Taskmaster/app/src/main/res/layout/task_item_layout.xml" value="0.1" />
         <entry key="..\:/Users/iaz/AndroidStudioProjects/Taskmaster/app/src/main/res/menu/main.xml" value="0.1" />
+        <entry key="..\:/Users/iaz/AndroidStudioProjects/Taskmaster/app/src/main/res/menu/taskdetail.xml" value="0.20416666666666666" />
       </map>
     </option>
   </component>

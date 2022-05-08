@@ -26,13 +26,14 @@ public class AddTask extends AppCompatActivity {
 
 
         setContentView(R.layout.activity_add_task);
-        TextView text=findViewById(R.id.textView3);
-        Button button=findViewById(R.id.button3);
+        TextView text = findViewById(R.id.textView3);
+        Button button = findViewById(R.id.button3);
 
-    button.setOnClickListener(view -> {
-text.setText("submitted!");
-    });
+        button.setOnClickListener(view -> {
+            text.setText("submitted!");
+        });
     }
+
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
