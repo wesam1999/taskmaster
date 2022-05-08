@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,8 +27,7 @@ public class MainActivity extends AppCompatActivity {
         textView = findViewById(R.id.textView7);
         Button clickButton=findViewById(R.id.button);
         Button clickButton2=findViewById(R.id.button2);
-        Button clickButton3=findViewById(R.id.button5);
-        Button clickButton4=findViewById(R.id.button6);
+
 
 clickButton.setOnClickListener(view -> {
     Intent startSecondActivityIntent = new Intent(this, AddTask.class);
@@ -36,15 +36,10 @@ clickButton.setOnClickListener(view -> {
 });
 
 clickButton2.setOnClickListener(view -> {
-    navigateToTaskDetail();
+    navigateToTaskModel();
 });
 
-clickButton3.setOnClickListener(v -> {
-    navigateToTaskDetail();
-});
-clickButton4.setOnClickListener(v -> {
-    navigateToTaskDetail();
-});
+
     }
 
     @Override
@@ -63,7 +58,7 @@ clickButton4.setOnClickListener(v -> {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        // set text on text view address widget
+
         textView.setText(sharedPreferences.getString(Settings.ADDRESS, "does not saved"));
     }
 
@@ -109,6 +104,10 @@ clickButton4.setOnClickListener(v -> {
 
     private void navigateToTaskDetail() {
         Intent settingsIntent = new Intent(this, TaskDetail.class);
+        startActivity(settingsIntent);
+    }
+    private void navigateToTaskModel() {
+        Intent settingsIntent = new Intent(this, TaskModel.class);
         startActivity(settingsIntent);
     }
 }
