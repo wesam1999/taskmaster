@@ -13,39 +13,36 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.time.Instant;
+
 public class TaskDetail extends AppCompatActivity {
 
-    private TextView title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_detail);
 
-        title = findViewById(R.id.textView5);
-
+        TextView textView = findViewById(R.id.textView5);
+        TextView textView2 = findViewById(R.id.textView8);
+        TextView textView3 = findViewById(R.id.textView6);
         ActionBar actionBar = getSupportActionBar();
 
 
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-//        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-//
-//
-//        title.setText(sharedPreferences.getString(TaskModel.tasknames, "task detail"));
-        setContentView(R.layout.activity_task_detail);
 
 
+        Intent passedIntent = getIntent();
+        String tasks = passedIntent.getStringExtra("task");
+        String taskState = passedIntent.getStringExtra("taskstate");
+        String taskBody = passedIntent.getStringExtra("taskBody");
+
+        textView.setText(tasks);
+        textView2.setText(taskState);
+        textView3.setText(taskBody);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-
-        title.setText(sharedPreferences.getString(TaskModel.tasknames, "task detail"));
-    }
 
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {

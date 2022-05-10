@@ -7,15 +7,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.example.taskmaster.data.Models;
+import android.example.taskmaster.data.AppDatabase;
+import android.example.taskmaster.data.Tasks;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class TaskModel extends AppCompatActivity {
@@ -23,31 +21,38 @@ public class TaskModel extends AppCompatActivity {
     public static final String tasknames = "address";
 
 
-    List<Models> model = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        fitchdata();
+
+        List<Tasks> tasks= AppDatabase.getInstance(getApplicationContext()).taskDao().getAll();
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_model);
 
         RecyclerView RecycleTask = findViewById(R.id.Recycle_task);
-        RecycleModels recycleModels = new RecycleModels(model, position -> {
+        RecycleModels recycleModels = new RecycleModels(tasks, position -> {
             Toast.makeText(
                     TaskModel.this,
-                    "The item clicked => " + model.get(position).getTitle(), Toast.LENGTH_SHORT).show();
+                    "The item clicked => " + tasks.get(position).getTitle(), Toast.LENGTH_SHORT).show();
 
-            String taskname =  model.get(position).getTitle().toString();
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-            SharedPreferences.Editor preferenceEditor = sharedPreferences.edit();
+            String taskname =  tasks.get(position).getTitle().toString();
+            String taskState =  tasks.get(position).getState().toString();
+            String taskBody =  tasks.get(position).getBody().toString();
 
 
-            preferenceEditor.putString(tasknames, taskname);
-            preferenceEditor.apply();
-            Toast.makeText(this, "task name is Saved=>"+taskname, Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(getApplicationContext(), TaskDetail.class));
+      Intent intent=new Intent(getApplicationContext(),TaskDetail.class);
+
+      intent.putExtra("task",taskname);
+      intent.putExtra("taskstate",taskState);
+            intent.putExtra("taskBody",taskBody);
+            startActivity(intent);
+
+
+
+
         });
 
         RecycleTask.setAdapter(recycleModels);
@@ -90,7 +95,6 @@ public class TaskModel extends AppCompatActivity {
                 navigateToMain();
                 return true;
             case R.id.action_Settings:
-                Toast.makeText(this, "Copyright 2022", Toast.LENGTH_SHORT).show();
                 navigateToSettings();
                 return true;
             default:
@@ -98,17 +102,5 @@ public class TaskModel extends AppCompatActivity {
         }
     }
 
-    private void fitchdata() {
-        model.add(new Models("task one", "in progress", "body "));
-        model.add(new Models("task two ", "complete", "body"));
-        model.add(new Models("task three", "assigned", "body"));
-        model.add(new Models("task three", "new", "body"));
 
-    }
-    private void saveAddress() {
-
-
-
-
-    }
 }

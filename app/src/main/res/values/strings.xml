@@ -6,4 +6,5 @@
     <string name="action_Settings">action_Settings</string>
     <string name="action_mainpage">action_mainpage</string>
     <string name="mainPage">mainPage</string>
+    <string name="state">state</string>
 </resources>
