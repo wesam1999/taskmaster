@@ -86,9 +86,6 @@ clickButton2.setOnClickListener(view -> {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_TaskDetail:
-                navigateToTaskDetail();
-                return true;
             case R.id.action_Settings:
                 Toast.makeText(this, "Copyright 2022", Toast.LENGTH_SHORT).show();
                 navigateToSettings();

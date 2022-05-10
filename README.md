@@ -6,20 +6,18 @@
 ![image description](screenshots/image5.png)
 ![image description](screenshots/image6.png)
 ![image description](screenshots/image7.png)
+![image description](screenshots/image8.png)
+![image description](screenshots/image9.png)
+![image description](screenshots/image10.png)
 ## how it is works
 Homepage
-The main page  be modified to contain three different buttons with hardcoded task titles. <br />
-When a user taps one of the titles, it should go to the Task Detail page, and the title at the top of the page should match the task title that was tapped on the previous page.<br />
-<br />
-The homepage also contain a button to visit the Settings page, and once the user has entered their username, it should display “{username}’s tasks” above the three task buttons.<br />
+Refactor your homepage’s RecyclerView to display all Task entities in your database <br />
 Add a Task<br />
-On the “Add a Task” page, allow users to type in details about a new task, specifically a title and a body. When users click the “submit” button, show a “submitted!” label on the page.<br />
+Modify your Add Task form to save the data entered in as a Task in your local database.<br />
 
-All Tasks<br />
-The all tasks page should just be an image with a back button; it needs no functionality.<br />
-Task Detail Page<br />
- It  have a title at the top of the page, and a Lorem Ipsum description.<br />
+Detail Page<br />
+Ensure that the description and status of a tapped task are also displayed on the detail page, in addition to the title. (Note that you can accomplish this by passing along the entire Task entity, or by passing along only its ID in the intent.)<br />
 
-Settings Page<br />
- It  allow users to enter their username and hit save.<br />
+Task Model and Room<br />
+Following the directions provided in the Android documentation, set up Room in your application, and modify your Task class to be an Entity.<br />
 

@@ -1,6 +1,6 @@
 package android.example.taskmaster;
 
-import android.example.taskmaster.data.Models;
+import android.example.taskmaster.data.Tasks;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +12,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class RecycleModels extends RecyclerView.Adapter<RecycleModels.taskviewsholoder> {
-    List<Models> models;
+    List<Tasks> models;
     CustomClickListener listener;
 
-    public RecycleModels(List<Models> models, CustomClickListener listener) {
+    public RecycleModels(List<Tasks> models, CustomClickListener listener) {
         this.models = models;
         this.listener = listener;
     }
