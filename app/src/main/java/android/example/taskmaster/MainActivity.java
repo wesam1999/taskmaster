@@ -42,11 +42,7 @@ clickButton2.setOnClickListener(view -> {
 
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
 
-    }
 
     @Override
     protected void onResume() {
@@ -62,20 +58,7 @@ clickButton2.setOnClickListener(view -> {
         textView.setText(sharedPreferences.getString(Settings.ADDRESS, "does not saved"));
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

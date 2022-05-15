@@ -4,9 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.example.taskmaster.data.AppDatabase;
 import android.example.taskmaster.data.Tasks;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -70,14 +72,35 @@ String state = spinner.getSelectedItem().toString();
 
         });
     }
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.taskdetail, menu);
+        return true;
+    }
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 this.finish();
                 return true;
+            case R.id.action_mainpage:
+                navigateToMain();
+                return true;
+            case R.id.action_Settings:
+                navigateToSettings();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
+    private void navigateToSettings() {
+        Intent weatherDetailsIntent = new Intent(this, Settings.class);
+        startActivity(weatherDetailsIntent);
+    }
+
+    private void navigateToMain() {
+        Intent settingsIntent = new Intent(this, MainActivity.class);
+        startActivity(settingsIntent);
+    }
+
+
 
 }
