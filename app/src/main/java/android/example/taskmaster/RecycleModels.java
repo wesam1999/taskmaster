@@ -9,13 +9,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.amplifyframework.datastore.generated.model.Task;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecycleModels extends RecyclerView.Adapter<RecycleModels.taskviewsholoder> {
-    List<Tasks> models;
+    List<Task> models;
     CustomClickListener listener;
 
-    public RecycleModels(List<Tasks> models, CustomClickListener listener) {
+    public RecycleModels(ArrayList<Task> models, CustomClickListener listener) {
         this.models = models;
         this.listener = listener;
     }
@@ -32,7 +35,7 @@ public class RecycleModels extends RecyclerView.Adapter<RecycleModels.taskviewsh
     public void onBindViewHolder(@NonNull taskviewsholoder holder, int position) {
         holder.title.setText(models.get(position).getTitle());
         holder.body.setText(models.get(position).getBody());
-        holder.state.setText(models.get(position).getState());
+        holder.state.setText(models.get(position).getStatus());
 
     }
 
