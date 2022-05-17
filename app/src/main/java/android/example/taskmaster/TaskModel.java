@@ -10,17 +10,21 @@ import android.content.Intent;
 import android.example.taskmaster.data.AppDatabase;
 import android.example.taskmaster.data.Tasks;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.amplifyframework.core.Amplify;
+import com.amplifyframework.datastore.generated.model.Task;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class TaskModel extends AppCompatActivity {
 
     public static final String tasknames = "address";
-
-
+    private static final String TAG = TaskModel.class.getName().toString();
 
 
     @Override
@@ -33,31 +37,51 @@ public class TaskModel extends AppCompatActivity {
         setContentView(R.layout.activity_task_model);
 
         RecyclerView RecycleTask = findViewById(R.id.Recycle_task);
-        RecycleModels recycleModels = new RecycleModels(tasks, position -> {
-            Toast.makeText(
-                    TaskModel.this,
-                    "The item clicked => " + tasks.get(position).getTitle(), Toast.LENGTH_SHORT).show();
+        Amplify.DataStore.query(Task.class,
+                task->{
 
-            String taskname =  tasks.get(position).getTitle().toString();
-            String taskState =  tasks.get(position).getState().toString();
-            String taskBody =  tasks.get(position).getBody().toString();
+                    ArrayList<Task> taskArrayList=new ArrayList<>();
+            while (task.hasNext()){
 
+                Task task3 = task.next();
 
-      Intent intent=new Intent(getApplicationContext(),TaskDetail.class);
+                taskArrayList.add(task3);
 
-      intent.putExtra("task",taskname);
-      intent.putExtra("taskstate",taskState);
-            intent.putExtra("taskBody",taskBody);
-            startActivity(intent);
+            }
 
 
+                RecycleModels recycleModels = new RecycleModels(taskArrayList, position -> {
+                    Toast.makeText(
+                            TaskModel.this,
+                            "The item clicked => " + tasks.get(position).getTitle(), Toast.LENGTH_SHORT).show();
+
+                    String titleQurey= taskArrayList.get(position).getTitle();
+                    String StatusQuery=taskArrayList.get(position).getStatus();
+                    String BODYQuery=taskArrayList.get(position).getBody();
 
 
+                    Intent intent=new Intent(getApplicationContext(),TaskDetail.class);
+
+                    intent.putExtra("task",titleQurey);
+                    intent.putExtra("taskstate",StatusQuery);
+                    intent.putExtra("taskBody",BODYQuery);
+                    startActivity(intent);
+
+
+
+
+                });
+
+                RecycleTask.setAdapter(recycleModels);
+                RecycleTask.setHasFixedSize(true);
+                RecycleTask.setLayoutManager(new LinearLayoutManager(this));
+
+
+                }
+                ,falied->{
+            Log.e(TAG,falied.toString());
         });
 
-        RecycleTask.setAdapter(recycleModels);
-        RecycleTask.setHasFixedSize(true);
-        RecycleTask.setLayoutManager(new LinearLayoutManager(this));
 
 
     }

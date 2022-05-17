@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.example.taskmaster.data.AppDatabase;
 import android.example.taskmaster.data.Tasks;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,10 +20,16 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amplifyframework.AmplifyException;
+import com.amplifyframework.api.aws.AWSApiPlugin;
+import com.amplifyframework.core.Amplify;
+import com.amplifyframework.datastore.AWSDataStorePlugin;
+import com.amplifyframework.datastore.generated.model.Task;
+
 import java.util.ArrayList;
 
 public class AddTask extends AppCompatActivity {
-
+    private static final String TAG = AddTask.class.getName();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,8 +40,21 @@ public class AddTask extends AppCompatActivity {
 
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+        try {
+            Amplify.addPlugin(new AWSApiPlugin());
+            Amplify.addPlugin(new AWSDataStorePlugin());
+            Amplify.configure(getApplicationContext());
 
-
+            Log.i(TAG, "Initialized Amplify");
+        } catch (AmplifyException e) {
+            Log.e(TAG, "Could not initialize Amplify", e);
+        }
+        Amplify.DataStore.observe(Task.class,
+                started -> Log.i(TAG, "Observation began."),
+                change -> Log.i(TAG, change.item().toString()),
+                failure -> Log.e(TAG, "Observation failed.", failure),
+                () -> Log.i(TAG, "Observation complete.")
+        );
         TextView text = findViewById(R.id.textView3);
         Button button = findViewById(R.id.button3);
         Spinner spinner = findViewById(R.id.spinner);
@@ -65,8 +85,13 @@ public class AddTask extends AppCompatActivity {
             String body = bodyFild.getText().toString();
 
 String state = spinner.getSelectedItem().toString();
-            Tasks task = new Tasks(title,body,state);
-            AppDatabase.getInstance(getApplicationContext()).taskDao().insertStudent(task);
+
+Task newTask=Task.builder().title(title).body(body).status(state).build();
+Amplify.DataStore.save(newTask, success -> Log.i(TAG, "Saved item: " + success.item().getTitle()),
+        error -> Log.e(TAG, "Could not save item to DataStore", error));
+
+//            Tasks task = new Tasks(title,body,state);
+//            AppDatabase.getInstance(getApplicationContext()).taskDao().insertStudent(task);
 
             text.setText("submitted!");
 
