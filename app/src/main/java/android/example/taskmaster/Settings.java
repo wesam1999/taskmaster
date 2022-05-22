@@ -8,9 +8,15 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class Settings extends AppCompatActivity {
 
@@ -34,10 +40,30 @@ public class Settings extends AppCompatActivity {
 
         editText = findViewById(R.id.editTextTextPersonName3);
         button = findViewById(R.id.button4);
+        Spinner spinner = findViewById(R.id.spinner2);
+        ArrayList<String> arrayList = new ArrayList<>();
+        arrayList.add("team1");
+        arrayList.add("team2");
+        arrayList.add("team3");
+        arrayList.add("team4");
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, arrayList);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(arrayAdapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String tutorialsName = arrayList.get(position);
+                Toast.makeText(parent.getContext(), "Selected: " + tutorialsName,Toast.LENGTH_LONG).show();
+
+            }
+            @Override
+            public void onNothingSelected(AdapterView <?> parent) {
+            }
+        });
         button.setOnClickListener(view -> {
 
             saveAddress();
-
+            String state = spinner.getSelectedItem().toString();
 
         });
     }

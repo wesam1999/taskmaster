@@ -17,12 +17,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amplifyframework.AmplifyException;
+import com.amplifyframework.api.aws.AWSApiPlugin;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.AWSDataStorePlugin;
 
 public class MainActivity extends AppCompatActivity {
 
-
+    private static final String TAG = MainActivity.class.getName();
 
     private TextView textView;
 
@@ -35,7 +36,15 @@ public class MainActivity extends AppCompatActivity {
         textView = findViewById(R.id.textView7);
         Button clickButton=findViewById(R.id.button);
         Button clickButton2=findViewById(R.id.button2);
+        try {
+            Amplify.addPlugin(new AWSApiPlugin());
+            Amplify.addPlugin(new AWSDataStorePlugin());
+            Amplify.configure(getApplicationContext());
 
+            Log.i(TAG, "Initialized Amplify");
+        } catch (AmplifyException e) {
+            Log.e(TAG, "Could not initialize Amplify", e);
+        }
 
 clickButton.setOnClickListener(view -> {
     Intent startSecondActivityIntent = new Intent(this, AddTask.class);

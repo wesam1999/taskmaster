@@ -10,11 +10,16 @@ import android.content.Intent;
 import android.example.taskmaster.data.AppDatabase;
 import android.example.taskmaster.data.Tasks;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Task;
 
@@ -22,65 +27,86 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TaskModel extends AppCompatActivity {
-
+    public static final String TASK_Array = "taskId";
     public static final String tasknames = "address";
     private static final String TAG = TaskModel.class.getName().toString();
-
+private Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ArrayList<Task> taskArrayList=new ArrayList<>();
+        Intent intent1 = getIntent();
+        String taskId = intent1.getStringExtra(AddTask.TASK_ID);
+
 
         List<Tasks> tasks= AppDatabase.getInstance(getApplicationContext()).taskDao().getAll();
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_model);
-
         RecyclerView RecycleTask = findViewById(R.id.Recycle_task);
-        Amplify.DataStore.query(Task.class,
-                task->{
+        handler=new Handler(
+                Looper.getMainLooper(), msg -> {
+            RecycleModels recycleModels = new RecycleModels(taskArrayList, position -> {
+                Toast.makeText(
+                        TaskModel.this,
+                        "The item clicked => " + taskArrayList.get(position).getTitle(), Toast.LENGTH_SHORT).show();
+                String titleQurey= taskArrayList.get(position).getTitle();
+                String StatusQuery=taskArrayList.get(position).getStatus();
+                String BODYQuery=taskArrayList.get(position).getBody();
+                Intent intent=new Intent(getApplicationContext(),TaskDetail.class);
+                intent.putExtra("task",titleQurey);
+                intent.putExtra("taskstate",StatusQuery);
+                intent.putExtra("taskBody",BODYQuery);
+                startActivity(intent);
+            });
+            RecycleTask.setAdapter(recycleModels);
+            RecycleTask.setHasFixedSize(true);
+            RecycleTask.setLayoutManager(new LinearLayoutManager(this));
+            return true;
 
-                    ArrayList<Task> taskArrayList=new ArrayList<>();
-            while (task.hasNext()){
+        }
+        );
+        Amplify.API.query(
+                ModelQuery.list(Task.class),
+                notes -> {
+//Task task1=notes.getData();
+//taskArrayList.add(task1);
 
-                Task task3 = task.next();
+                    for (Task note : notes.getData()) {
+                        Log.i(TAG, "<==================================>");
+                        Log.i(TAG, "The Task is => " + note.getTitle());
+                        taskArrayList.add(note);
 
-                taskArrayList.add(task3);
+                    }
 
-            }
+                    Bundle bundle=new Bundle();
+                    bundle.putString(TASK_Array, "done");
+                    Message message=new Message();
+                    message.setData(bundle);
+                    handler.sendMessage(message);
 
-
-                RecycleModels recycleModels = new RecycleModels(taskArrayList, position -> {
-                    Toast.makeText(
-                            TaskModel.this,
-                            "The item clicked => " + tasks.get(position).getTitle(), Toast.LENGTH_SHORT).show();
-
-                    String titleQurey= taskArrayList.get(position).getTitle();
-                    String StatusQuery=taskArrayList.get(position).getStatus();
-                    String BODYQuery=taskArrayList.get(position).getBody();
-
-
-                    Intent intent=new Intent(getApplicationContext(),TaskDetail.class);
-
-                    intent.putExtra("task",titleQurey);
-                    intent.putExtra("taskstate",StatusQuery);
-                    intent.putExtra("taskBody",BODYQuery);
-                    startActivity(intent);
+                },
+                error -> Log.e(TAG, error.toString())
+        );
 
 
+        Amplify.DataStore.observe(Task.class,
+                started -> Log.i(TAG, "Observation began."),
+                change -> {Log.i(TAG, change.item().toString());
+
+                    Bundle bundle=new Bundle();
+                    bundle.putString(TASK_Array,change.item().toString());
+
+                    Message message=new Message();
+                    message.setData(bundle);
+                    handler.sendMessage(message);
 
 
-                });
-
-                RecycleTask.setAdapter(recycleModels);
-                RecycleTask.setHasFixedSize(true);
-                RecycleTask.setLayoutManager(new LinearLayoutManager(this));
-
-
-                }
-                ,falied->{
-            Log.e(TAG,falied.toString());
-        });
+                },
+                failure -> Log.e(TAG, "Observation failed.", failure),
+                () -> Log.i(TAG, "Observation complete.")
+        );
 
 
 
