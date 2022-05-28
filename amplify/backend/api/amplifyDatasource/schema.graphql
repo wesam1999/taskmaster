@@ -6,14 +6,14 @@ type Task @model {
   status: String
   TeamTask: String
 }
-type team @model{
+type team @model {
   id: ID
   name:String
   listTasks : [Task] @hasMany
 listUser:[user] @hasMany
 
 }
-type user @model{
+type user @model {
   id: ID
    userName:String
   TeamUser: String

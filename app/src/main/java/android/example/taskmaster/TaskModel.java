@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Task;
+import com.amplifyframework.datastore.generated.model.team;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +38,7 @@ private Handler handler;
         ArrayList<Task> taskArrayList=new ArrayList<>();
         Intent intent1 = getIntent();
         String taskId = intent1.getStringExtra(AddTask.TASK_ID);
+        String userTeam= intent1.getStringExtra(Settings.USER_TEAM);
 
 
         List<Tasks> tasks= AppDatabase.getInstance(getApplicationContext()).taskDao().getAll();
@@ -67,28 +69,27 @@ private Handler handler;
 
         }
         );
-        Amplify.API.query(
-                ModelQuery.list(Task.class),
-                notes -> {
-//Task task1=notes.getData();
-//taskArrayList.add(task1);
 
-                    for (Task note : notes.getData()) {
-                        Log.i(TAG, "<==================================>");
-                        Log.i(TAG, "The Task is => " + note.getTitle());
-                        taskArrayList.add(note);
+        Amplify.API.query(
+                ModelQuery.get(team.class,team.NAME.eq(userTeam).toString()),
+                TeamsTask -> {
+                    Log.i("haveData", "onCreate: "+TeamsTask.getData().toString());
+                    for (Task task:
+                            TeamsTask.getData().getListTasks() ) {
+
+                        Toast.makeText(this, "this the task of the", Toast.LENGTH_SHORT).show();
+                        taskArrayList.add(task);
 
                     }
-
                     Bundle bundle=new Bundle();
                     bundle.putString(TASK_Array, "done");
                     Message message=new Message();
                     message.setData(bundle);
                     handler.sendMessage(message);
-
                 },
                 error -> Log.e(TAG, error.toString())
         );
+
 
 
         Amplify.DataStore.observe(Task.class,

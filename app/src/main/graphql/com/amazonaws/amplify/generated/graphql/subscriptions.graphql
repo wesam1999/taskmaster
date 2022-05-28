@@ -5,11 +5,13 @@ subscription OnCreateTask {
     title
     body
     status
+    TeamTask
     createdAt
     updatedAt
     _version
     _deleted
     _lastChangedAt
+    teamListTasksId
   }
 }
 subscription OnUpdateTask {
@@ -18,11 +20,13 @@ subscription OnUpdateTask {
     title
     body
     status
+    TeamTask
     createdAt
     updatedAt
     _version
     _deleted
     _lastChangedAt
+    teamListTasksId
   }
 }
 subscription OnDeleteTask {
@@ -31,10 +35,177 @@ subscription OnDeleteTask {
     title
     body
     status
+    TeamTask
     createdAt
     updatedAt
     _version
     _deleted
     _lastChangedAt
+    teamListTasksId
+  }
+}
+subscription OnCreateTeam {
+  onCreateTeam {
+    id
+    name
+    listTasks {
+      items {
+        id
+        title
+        body
+        status
+        TeamTask
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        teamListTasksId
+      }
+      nextToken
+      startedAt
+    }
+    listUser {
+      items {
+        id
+        userName
+        TeamUser
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        teamListUserId
+      }
+      nextToken
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+subscription OnUpdateTeam {
+  onUpdateTeam {
+    id
+    name
+    listTasks {
+      items {
+        id
+        title
+        body
+        status
+        TeamTask
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        teamListTasksId
+      }
+      nextToken
+      startedAt
+    }
+    listUser {
+      items {
+        id
+        userName
+        TeamUser
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        teamListUserId
+      }
+      nextToken
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+subscription OnDeleteTeam {
+  onDeleteTeam {
+    id
+    name
+    listTasks {
+      items {
+        id
+        title
+        body
+        status
+        TeamTask
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        teamListTasksId
+      }
+      nextToken
+      startedAt
+    }
+    listUser {
+      items {
+        id
+        userName
+        TeamUser
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        teamListUserId
+      }
+      nextToken
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+subscription OnCreateUser {
+  onCreateUser {
+    id
+    userName
+    TeamUser
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    teamListUserId
+  }
+}
+subscription OnUpdateUser {
+  onUpdateUser {
+    id
+    userName
+    TeamUser
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    teamListUserId
+  }
+}
+subscription OnDeleteUser {
+  onDeleteUser {
+    id
+    userName
+    TeamUser
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    teamListUserId
   }
 }

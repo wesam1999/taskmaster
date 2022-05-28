@@ -7,4 +7,16 @@
     <string name="action_mainpage">action_mainpage</string>
     <string name="mainPage">mainPage</string>
     <string name="state">state</string>
+    <string name="yourTeam">yourTeam</string>
+    <string name="team1">username</string>
+    <string name="save">save</string>
+    <string name="label_enter_code">Enter verification code</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_sign_up">Sign up</string>
+    <string name="sign_up_prompt">Don\'t have account? SIGN UP</string>
+    <string name="title_activity_login">Login Activity</string>
+    <string name="title_activity_sign_up">Sign Up Activity</string>
 </resources>
