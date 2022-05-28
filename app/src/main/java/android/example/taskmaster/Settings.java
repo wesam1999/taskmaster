@@ -6,7 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,15 +20,24 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.amplifyframework.api.graphql.model.ModelMutation;
+import com.amplifyframework.api.graphql.model.ModelQuery;
+import com.amplifyframework.core.Amplify;
+import com.amplifyframework.datastore.generated.model.team;
+import com.amplifyframework.datastore.generated.model.user;
+
 import java.util.ArrayList;
 
 public class Settings extends AppCompatActivity {
 
     public static final String ADDRESS = "address";
+    public static final String USER_TEAM = "user team";
+    private static final String TAG = Settings.class.getName();
+
     public static String address;
     private Button button;
     private EditText editText;
-
+    private Handler handler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,14 +54,34 @@ public class Settings extends AppCompatActivity {
         editText = findViewById(R.id.editTextTextPersonName3);
         button = findViewById(R.id.button4);
         Spinner spinner = findViewById(R.id.spinner2);
+        handler = new Handler(Looper.getMainLooper(), msg -> {
+            saveAddress();
+            return true;
+        });
+
         ArrayList<String> arrayList = new ArrayList<>();
-        arrayList.add("team1");
-        arrayList.add("team2");
-        arrayList.add("team3");
-        arrayList.add("team4");
+        Amplify.API.query(
+                ModelQuery.list(team.class),
+                teamsName -> {
+                    for (team note : teamsName.getData()) {
+                        Log.i(TAG, "<==================================>");
+                        Log.i(TAG, "The team name is => " + note.getName());
+                        arrayList.add(note.getName());
+                    }
+
+
+                },
+                error -> Log.e(TAG, error.toString())
+        );
+
+
+
+
+
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, arrayList);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(arrayAdapter);
+        arrayAdapter.notifyDataSetChanged();
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -62,11 +95,30 @@ public class Settings extends AppCompatActivity {
         });
         button.setOnClickListener(view -> {
 
-            saveAddress();
             String state = spinner.getSelectedItem().toString();
+            Log.i("spinnerSettings", "onCreate: "+state);
+String userName=editText.getText().toString();
+         user user1=user.builder().userName(userName).build() ;
 
+            Amplify.API.mutate(
+                    ModelMutation.create(user1),
+                    response -> {
+                        Log.i("MyAmplifyApp", "Added Todo with id: " + response.getData().getId());
+                        Bundle bundle=new Bundle();
+                        bundle.putString(USER_TEAM,response.getData().getTeamUser().toString());
+
+                        Message message=new Message();
+                        bundle.putString("sadasd", "done");
+                        message.setData(bundle);
+                        handler.sendMessage(message);
+
+
+                    },
+                    error -> Log.e("MyAmplifyApp", "Create failed", error)
+            );
         });
     }
+
 
     private void saveAddress() {
 
@@ -80,6 +132,7 @@ public class Settings extends AppCompatActivity {
         Toast.makeText(this, "username is Saved", Toast.LENGTH_SHORT).show();
 
     }
+
 
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {

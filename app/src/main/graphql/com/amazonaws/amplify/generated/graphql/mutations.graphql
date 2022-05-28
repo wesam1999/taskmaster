@@ -8,11 +8,13 @@ mutation CreateTask(
     title
     body
     status
+    TeamTask
     createdAt
     updatedAt
     _version
     _deleted
     _lastChangedAt
+    teamListTasksId
   }
 }
 mutation UpdateTask(
@@ -24,11 +26,13 @@ mutation UpdateTask(
     title
     body
     status
+    TeamTask
     createdAt
     updatedAt
     _version
     _deleted
     _lastChangedAt
+    teamListTasksId
   }
 }
 mutation DeleteTask(
@@ -40,10 +44,195 @@ mutation DeleteTask(
     title
     body
     status
+    TeamTask
     createdAt
     updatedAt
     _version
     _deleted
     _lastChangedAt
+    teamListTasksId
+  }
+}
+mutation CreateTeam(
+  $input: CreateTeamInput!
+  $condition: ModelTeamConditionInput
+) {
+  createTeam(input: $input, condition: $condition) {
+    id
+    name
+    listTasks {
+      items {
+        id
+        title
+        body
+        status
+        TeamTask
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        teamListTasksId
+      }
+      nextToken
+      startedAt
+    }
+    listUser {
+      items {
+        id
+        userName
+        TeamUser
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        teamListUserId
+      }
+      nextToken
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+mutation UpdateTeam(
+  $input: UpdateTeamInput!
+  $condition: ModelTeamConditionInput
+) {
+  updateTeam(input: $input, condition: $condition) {
+    id
+    name
+    listTasks {
+      items {
+        id
+        title
+        body
+        status
+        TeamTask
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        teamListTasksId
+      }
+      nextToken
+      startedAt
+    }
+    listUser {
+      items {
+        id
+        userName
+        TeamUser
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        teamListUserId
+      }
+      nextToken
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+mutation DeleteTeam(
+  $input: DeleteTeamInput!
+  $condition: ModelTeamConditionInput
+) {
+  deleteTeam(input: $input, condition: $condition) {
+    id
+    name
+    listTasks {
+      items {
+        id
+        title
+        body
+        status
+        TeamTask
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        teamListTasksId
+      }
+      nextToken
+      startedAt
+    }
+    listUser {
+      items {
+        id
+        userName
+        TeamUser
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        teamListUserId
+      }
+      nextToken
+    }
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+  }
+}
+mutation CreateUser(
+  $input: CreateUserInput!
+  $condition: ModelUserConditionInput
+) {
+  createUser(input: $input, condition: $condition) {
+    id
+    userName
+    TeamUser
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    teamListUserId
+  }
+}
+mutation UpdateUser(
+  $input: UpdateUserInput!
+  $condition: ModelUserConditionInput
+) {
+  updateUser(input: $input, condition: $condition) {
+    id
+    userName
+    TeamUser
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    teamListUserId
+  }
+}
+mutation DeleteUser(
+  $input: DeleteUserInput!
+  $condition: ModelUserConditionInput
+) {
+  deleteUser(input: $input, condition: $condition) {
+    id
+    userName
+    TeamUser
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    teamListUserId
   }
 }

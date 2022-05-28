@@ -5,8 +5,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.example.taskmaster.data.AppDatabase;
-import android.example.taskmaster.data.Tasks;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -23,120 +21,66 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.amplifyframework.AmplifyException;
-import com.amplifyframework.api.aws.AWSApiPlugin;
 import com.amplifyframework.api.graphql.model.ModelMutation;
+import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
-import com.amplifyframework.datastore.AWSDataStorePlugin;
 import com.amplifyframework.datastore.generated.model.Task;
+import com.amplifyframework.datastore.generated.model.team;
 
 import java.util.ArrayList;
 
 public class AddTask extends AppCompatActivity {
     public static final String TASK_ID = "taskId";
     private Handler handler;
+    private Handler handler2;
     private static final String TAG = AddTask.class.getName();
+    private EditText titleFild;
+    private EditText bodyFild;
+    private Spinner spinner3;
+    private ArrayList<String> arrayListspinner3;
+    private TextView text;
+    private Button button;
+    private Spinner spinner;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
 
         ActionBar actionBar = getSupportActionBar();
-
+        spinner3 = findViewById(R.id.spinner3);
+        arrayListspinner3 = new ArrayList<>();
 
         actionBar.setDisplayHomeAsUpEnabled(true);
+        text = findViewById(R.id.textView3);
+        button = findViewById(R.id.button3);
+        spinner = findViewById(R.id.spinner);
+        handle();
+
+
+        observe();
 
 
 
-
-        Amplify.DataStore.observe(Task.class,
-                started -> Log.i(TAG, "Observation began."),
-                change -> {Log.i(TAG, change.item().toString());
-
-                    Bundle bundle=new Bundle();
-                    bundle.putString(TASK_ID,change.item().toString());
-
-                    Message message=new Message();
-                    message.setData(bundle);
-                    handler.sendMessage(message);
+        add_spinner();
 
 
-                },
-                failure -> Log.e(TAG, "Observation failed.", failure),
-                () -> Log.i(TAG, "Observation complete.")
-        );
-        TextView text = findViewById(R.id.textView3);
-        Button button = findViewById(R.id.button3);
-        Spinner spinner = findViewById(R.id.spinner);
-        ArrayList<String> arrayList = new ArrayList<>();
-        arrayList.add("new");
-        arrayList.add("in progress");
-        arrayList.add("complete");
-        arrayList.add("assigned");
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, arrayList);
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(arrayAdapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String tutorialsName = arrayList.get(position);
-                Toast.makeText(parent.getContext(), "Selected: " + tutorialsName,Toast.LENGTH_LONG).show();
 
-            }
-            @Override
-            public void onNothingSelected(AdapterView <?> parent) {
-            }
-        });
-        Spinner spinner3 = findViewById(R.id.spinner3);
-        ArrayList<String> arrayList3 = new ArrayList<>();
-        arrayList.add("team1");
-        arrayList.add("team2");
-        arrayList.add("team3");
-        arrayList.add("team4");
-        ArrayAdapter<String> arrayAdapter3 = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, arrayList);
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(arrayAdapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String tutorialsName = arrayList.get(position);
-                Toast.makeText(parent.getContext(), "Selected: " + tutorialsName,Toast.LENGTH_LONG).show();
+        add_Spinner_API_Query();
 
-            }
-            @Override
-            public void onNothingSelected(AdapterView <?> parent) {
-            }
-        });
+
         button.setOnClickListener(view -> {
-            EditText titleFild = findViewById(R.id.editTextTextPersonName);
+            titleFild = findViewById(R.id.editTextTextPersonName);
             String title = titleFild.getText().toString();
 
-            EditText bodyFild = findViewById(R.id.editTextTextPersonName2);
+            bodyFild = findViewById(R.id.editTextTextPersonName2);
             String body = bodyFild.getText().toString();
 
 String state = spinner.getSelectedItem().toString();
 
-            String state3 = spinner3.getSelectedItem().toString();
+            String teamTask = spinner3.getSelectedItem().toString();
 Task newTask=Task.builder().title(title).body(body).status(state).build();
-//Amplify.DataStore.save(newTask, success -> Log.i(TAG, "Saved item: " + success.item().getTitle()),
-//        error -> Log.e(TAG, "Could not save item to DataStore", error));
-            handler=new Handler(
-                    Looper.getMainLooper(),msg -> {
-
-                String taskId = msg.getData().getString(TASK_ID);
-                Intent intent = new Intent(this, TaskModel.class);
-                intent.putExtra(TASK_ID, taskId);
-
-                startActivity(intent);
-
-                Toast.makeText(this, "the toast is works"+msg, Toast.LENGTH_SHORT).show();
-                text.setText("submitted!");
-                return true;
-
-            }
-            );
-
-
             Amplify.API.mutate(
                     ModelMutation.create(newTask),
                     response -> {
@@ -154,16 +98,122 @@ Task newTask=Task.builder().title(title).body(body).status(state).build();
             );
 
 
-
-
-
-//            Tasks task = new Tasks(title,body,state);
-//            AppDatabase.getInstance(getApplicationContext()).taskDao().insertStudent(task);
-
-
-
         });
     }
+    public void add_Spinner_API_Query(){
+        Amplify.API.query(
+                ModelQuery.list(team.class),
+                teamsName -> {
+                    for (team note : teamsName.getData()) {
+                        Bundle bundle=new Bundle();
+                        bundle.putString(TASK_ID,note.getName());
+
+                        Message message=new Message();
+                        message.setData(bundle);
+                        handler.sendMessage(message);
+
+
+
+
+                    }
+
+                },
+                error -> Log.e(TAG, error.toString())
+        );
+
+        ArrayAdapter<String> arrayAdapter3 = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, arrayListspinner3);
+        spinner3.setAdapter(arrayAdapter3);
+        spinner3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String nameTeam=arrayListspinner3.get(position);
+                Toast.makeText(AddTask.this, "select team =>"+nameTeam, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+    }
+   public void   observe(){
+
+       Amplify.DataStore.observe(Task.class,
+               started -> Log.i(TAG, "Observation began."),
+               change -> {Log.i(TAG, change.item().toString());
+
+                   Bundle bundle=new Bundle();
+                   bundle.putString(TASK_ID,change.item().toString());
+
+                   Message message=new Message();
+                   message.setData(bundle);
+                   handler.sendMessage(message);
+
+
+               },
+               failure -> Log.e(TAG, "Observation failed.", failure),
+               () -> Log.i(TAG, "Observation complete.")
+       );
+   }
+
+    public void handle(){
+
+        handler=new Handler(
+                Looper.getMainLooper(),msg -> {
+
+            String taskId = msg.getData().getString(TASK_ID);
+            Intent intent = new Intent(this, TaskModel.class);
+            intent.putExtra(TASK_ID, taskId);
+
+            startActivity(intent);
+
+            Toast.makeText(this, "the toast is works"+msg, Toast.LENGTH_SHORT).show();
+            text.setText("submitted!");
+            return true;
+
+        }
+        );
+        handler2=new Handler(
+                Looper.getMainLooper(),msg -> {
+
+            arrayListspinner3.add(msg.getData().toString());
+            return true;
+
+        }
+        );
+    }
+
+    public void add_spinner(){
+
+        ArrayList<String> arrayList = new ArrayList<>();
+        arrayList.add("new");
+        arrayList.add("in progress");
+        arrayList.add("complete");
+        arrayList.add("assigned");
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, arrayList);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(arrayAdapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String tutorialsName = arrayList.get(position);
+                Toast.makeText(parent.getContext(), "Selected teams : " + tutorialsName,Toast.LENGTH_LONG).show();
+
+            }
+            @Override
+            public void onNothingSelected(AdapterView <?> parent) {
+            }
+        });
+    }
+
+
+
+
+
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.taskdetail, menu);
