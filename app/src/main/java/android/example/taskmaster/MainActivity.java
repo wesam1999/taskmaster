@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.amplifyframework.AmplifyException;
 import com.amplifyframework.api.aws.AWSApiPlugin;
 import com.amplifyframework.api.graphql.model.ModelMutation;
+import com.amplifyframework.auth.AuthUser;
 import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.AWSDataStorePlugin;
@@ -33,71 +34,18 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getName();
 private Handler handler;
     private TextView textView;
+    private TextView email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        try {
-//            // Add this line, to include the Auth plugin.
-//            Amplify.addPlugin(new AWSCognitoAuthPlugin());
-//            Amplify.addPlugin(new AWSApiPlugin());
-//            Amplify.addPlugin(new AWSDataStorePlugin());
-//            Amplify.configure(getApplicationContext());
-//
-//            Log.i(TAG, "Initialized Amplify");
-//        } catch (AmplifyException e) {
-//            Log.e(TAG, "Could not initialize Amplify", e);
-//        }
 
-        team team1 = team.builder().name("TEAM1").build();
-
-        Amplify.API.mutate(
-                ModelMutation.create(team1),
-                response -> {
-                    Log.i("MyAmplifyApp", "Added Todo with id: " + response.getData().getId());
-                    Bundle bundle=new Bundle();
-                    bundle.putString("main class",response.getData().getName());
-
-                    Message message=new Message();
-                    message.setData(bundle);
-                    handler.sendMessage(message);
-
-
-                },
-                error -> Log.e("MyAmplifyApp", "Create failed", error)
-        );
-
-        handler=new Handler(
-                Looper.getMainLooper(), msg -> {
-
-            Toast.makeText(this, "handle is work=>", Toast.LENGTH_SHORT).show();
-            return true;
-
-        }
-        );
-
-
-        Amplify.DataStore.observe(Task.class,
-                started -> Log.i(TAG, "Observation began."),
-                change -> {Log.i(TAG, change.item().toString());
-
-                    Bundle bundle=new Bundle();
-                    bundle.putString("main class",change.item().toString());
-
-                    Message message=new Message();
-                    message.setData(bundle);
-                    handler.sendMessage(message);
-
-
-                },
-                failure -> Log.e(TAG, "Observation failed.", failure),
-                () -> Log.i(TAG, "Observation complete.")
-        );
         textView = findViewById(R.id.textView7);
         Button clickButton=findViewById(R.id.button);
         Button clickButton2=findViewById(R.id.button2);
-
+        email = findViewById(R.id.textView10);
+email.setText(getCurrentValue());
 clickButton.setOnClickListener(view -> {
     Intent startSecondActivityIntent = new Intent(this, AddTask.class);
     startActivity(startSecondActivityIntent);
@@ -110,8 +58,6 @@ clickButton2.setOnClickListener(view -> {
 
 
     }
-
-
 
     @Override
     protected void onResume() {
@@ -142,6 +88,12 @@ clickButton2.setOnClickListener(view -> {
                 Toast.makeText(this, "Copyright 2022", Toast.LENGTH_SHORT).show();
                 navigateToSettings();
                 return true;
+            case R.id.logout:
+                logout();
+                return true;
+            case R.id.reset:
+                navigateToReset();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -151,12 +103,36 @@ clickButton2.setOnClickListener(view -> {
         startActivity(weatherDetailsIntent);
     }
 
-    private void navigateToTaskDetail() {
-        Intent settingsIntent = new Intent(this, TaskDetail.class);
+    private void navigateToReset() {
+        Intent settingsIntent = new Intent(this, ResetActivity.class);
         startActivity(settingsIntent);
     }
     private void navigateToTaskModel() {
         Intent settingsIntent = new Intent(this, TaskModel.class);
         startActivity(settingsIntent);
+    }
+    private void logout() {
+        Amplify.Auth.signOut(
+                () -> {
+                    Log.i(TAG, "Signed out successfully");
+                    startActivity(new Intent(MainActivity.this, login.class));
+                    authSession("logout");
+                    finish();
+                },
+                error -> Log.e(TAG, error.toString())
+        );
+    }
+    private void authSession(String method) {
+        Amplify.Auth.fetchAuthSession(
+                result -> Log.i(TAG, "Auth Session => " + method + result.toString()),
+                error -> Log.e(TAG, error.toString())
+        );
+    }
+    String getCurrentValue(){
+        AuthUser authUser=Amplify.Auth.getCurrentUser();
+        Log.e("getCurrentUser", authUser.toString());
+        Log.e("getCurrentUser", authUser.getUserId());
+        Log.e("getCurrentUser", authUser.getUsername());
+        return authUser.getUsername();
     }
 }

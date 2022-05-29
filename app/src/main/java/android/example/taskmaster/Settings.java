@@ -38,6 +38,11 @@ public class Settings extends AppCompatActivity {
     private Button button;
     private EditText editText;
     private Handler handler;
+    private String userName;
+    private user user1;
+    private Spinner spinner;
+    private ArrayList<String> arrayList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,72 +58,49 @@ public class Settings extends AppCompatActivity {
 
         editText = findViewById(R.id.editTextTextPersonName3);
         button = findViewById(R.id.button4);
-        Spinner spinner = findViewById(R.id.spinner2);
+        spinner = findViewById(R.id.spinner2);
         handler = new Handler(Looper.getMainLooper(), msg -> {
             saveAddress();
             return true;
         });
 
-        ArrayList<String> arrayList = new ArrayList<>();
-        Amplify.API.query(
-                ModelQuery.list(team.class),
-                teamsName -> {
-                    for (team note : teamsName.getData()) {
-                        Log.i(TAG, "<==================================>");
-                        Log.i(TAG, "The team name is => " + note.getName());
-                        arrayList.add(note.getName());
-                    }
+        arrayList = new ArrayList<>();
 
 
-                },
-                error -> Log.e(TAG, error.toString())
-        );
+        query();
 
+        spinnerOnclick();
 
-
-
-
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, arrayList);
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(arrayAdapter);
-        arrayAdapter.notifyDataSetChanged();
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String tutorialsName = arrayList.get(position);
-                Toast.makeText(parent.getContext(), "Selected: " + tutorialsName,Toast.LENGTH_LONG).show();
-
-            }
-            @Override
-            public void onNothingSelected(AdapterView <?> parent) {
-            }
-        });
         button.setOnClickListener(view -> {
 
             String state = spinner.getSelectedItem().toString();
-            Log.i("spinnerSettings", "onCreate: "+state);
-String userName=editText.getText().toString();
-         user user1=user.builder().userName(userName).build() ;
+            Log.i("spinnerSettings", "onCreate: " + state);
+            userName = editText.getText().toString();
+            user1 = user.builder().userName(userName).build();
+            save();
 
-            Amplify.API.mutate(
-                    ModelMutation.create(user1),
-                    response -> {
-                        Log.i("MyAmplifyApp", "Added Todo with id: " + response.getData().getId());
-                        Bundle bundle=new Bundle();
-                        bundle.putString(USER_TEAM,response.getData().getTeamUser().toString());
-
-                        Message message=new Message();
-                        bundle.putString("sadasd", "done");
-                        message.setData(bundle);
-                        handler.sendMessage(message);
-
-
-                    },
-                    error -> Log.e("MyAmplifyApp", "Create failed", error)
-            );
         });
     }
 
+    public void save() {
+
+        Amplify.API.mutate(
+                ModelMutation.create(user1),
+                response -> {
+                    Log.i("MyAmplifyApp", "Added Todo with id: " + response.getData().getId());
+                    Bundle bundle = new Bundle();
+                    bundle.putString(USER_TEAM, response.getData().getTeamUser().toString());
+
+                    Message message = new Message();
+                    bundle.putString("sadasd", "done");
+                    message.setData(bundle);
+                    handler.sendMessage(message);
+
+
+                },
+                error -> Log.e("MyAmplifyApp", "Create failed", error)
+        );
+    }
 
     private void saveAddress() {
 
@@ -143,4 +125,42 @@ String userName=editText.getText().toString();
         return super.onOptionsItemSelected(item);
     }
 
+    public void query() {
+        Amplify.API.query(
+                ModelQuery.list(team.class),
+                teamsName -> {
+                    for (team note : teamsName.getData()) {
+                        Log.i(TAG, "<==================================>");
+                        Log.i(TAG, "The team name is => " + note.getName());
+                        arrayList.add(note.getName());
+                    }
+
+
+                },
+                error -> Log.e(TAG, error.toString())
+        );
+
+    }
+
+    public void spinnerOnclick() {
+
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, arrayList);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(arrayAdapter);
+        arrayAdapter.notifyDataSetChanged();
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+             String iteam=parent.getItemAtPosition(position).toString();
+                String tutorialsName = arrayList.get(position);
+                Toast.makeText(parent.getContext(), "Selected the postion of the item: " + iteam, Toast.LENGTH_LONG).show();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+    }
 }
