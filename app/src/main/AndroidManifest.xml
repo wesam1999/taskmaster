@@ -3,7 +3,6 @@
     package="android.example.taskmaster">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name=".AmplifyApplication"
@@ -14,21 +13,24 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Taskmaster">
         <activity
+            android:name=".ResetActivity"
+            android:exported="false" />
+        <activity
             android:name=".VerificationActivity"
             android:exported="false" />
         <activity
             android:name=".SignUpActivity"
             android:exported="false"
-            android:label="@string/title_activity_sign_up"/>
+            android:label="@string/title_activity_sign_up" />
         <activity
             android:name=".login"
             android:exported="true"
             android:label="@string/title_activity_login">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".TaskModel"
@@ -47,8 +49,7 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="false"/>
-
+            android:exported="false" />
     </application>
 
 </manifest>
