@@ -21,3 +21,17 @@ Ensure that the description and status of a tapped task are also displayed on th
 Task Model and Room<br />
 Following the directions provided in the Android documentation, set up Room in your application, and modify your Task class to be an Entity.<br />
 
+AAB for the application<br />
+Version<br />
+1.0<br />
+Android . required<br />
+6.0 and up<br />
+Downloads<br />
++10 downloads<br />
+Content Rating<br />
+Rated as 3 years old and above More information<br />
+data security<br />
+View details<br />
+ what is the this app do <br />
+TaskMaster is a task management android application with the full functionalities that help you focus and be more productive throughout the day<br />
+
