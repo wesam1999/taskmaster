@@ -1,10 +1,13 @@
 package android.example.taskmaster;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -12,8 +15,6 @@ import android.os.Message;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,10 +24,12 @@ import android.widget.Toast;
 import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
-import com.amplifyframework.datastore.generated.model.team;
-import com.amplifyframework.datastore.generated.model.user;
+import com.amplifyframework.datastore.generated.model.Team;
+import com.amplifyframework.datastore.generated.model.User;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Settings extends AppCompatActivity {
 
@@ -39,10 +42,12 @@ public class Settings extends AppCompatActivity {
     private EditText editText;
     private Handler handler;
     private String userName;
-    private user user1;
+    private User user1;
     private Spinner spinner;
-    private ArrayList<String> arrayList;
+    private ArrayList<Team> arrayList=new ArrayList<Team>();
 
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,31 +58,68 @@ public class Settings extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
 
-        setContentView(R.layout.activity_settings);
+
 
 
         editText = findViewById(R.id.editTextTextPersonName3);
         button = findViewById(R.id.button4);
         spinner = findViewById(R.id.spinner2);
+
+
         handler = new Handler(Looper.getMainLooper(), msg -> {
             saveAddress();
             return true;
         });
 
-        arrayList = new ArrayList<>();
+        handler=new Handler(
+                Looper.getMainLooper(),msg -> {
+            ArrayList<String> spinnerlist= (ArrayList<String>) arrayList.stream().map(index->{
+                return index.getName();
+            }).collect(Collectors.toList());
 
+
+            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerlist);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(arrayAdapter);
+            return true;
+
+        }
+        );
 
         query();
 
-        spinnerOnclick();
 
         button.setOnClickListener(view -> {
 
-            String state = spinner.getSelectedItem().toString();
-            Log.i("spinnerSettings", "onCreate: " + state);
             userName = editText.getText().toString();
-            user1 = user.builder().userName(userName).build();
-            save();
+
+
+
+
+
+            for (int i = 0; i < arrayList.size(); i++) {
+
+                if (arrayList.get(i).getName()==spinner.getSelectedItem().toString()){
+                    user1 = User.builder().username(userName).teamListusersId(arrayList.get(i).getId()).build();
+                    arrayList.get(i).getListusers().add(user1);
+                    Intent sendStuff = new Intent(this, TaskModel.class);
+                    sendStuff.putExtra(USER_TEAM, arrayList.get(i).getId());
+                    startActivity(sendStuff);
+                }
+
+            }
+
+            Amplify.API.mutate(
+                    ModelMutation.create(user1),
+                    response -> {
+                        Log.i("MyAmplifyApp", "Added Todo with id: " + response);
+
+
+                    },
+                    error -> Log.e("MyAmplifyApp", "Create failed", error)
+            );
+
+//            save();
 
         });
     }
@@ -87,19 +129,14 @@ public class Settings extends AppCompatActivity {
         Amplify.API.mutate(
                 ModelMutation.create(user1),
                 response -> {
-                    Log.i("MyAmplifyApp", "Added Todo with id: " + response.getData().getId());
-                    Bundle bundle = new Bundle();
-                    bundle.putString(USER_TEAM, response.getData().getTeamUser().toString());
-
-                    Message message = new Message();
-                    bundle.putString("sadasd", "done");
-                    message.setData(bundle);
-                    handler.sendMessage(message);
+                    Log.i("MyAmplifyApp", "Added Todo with id: " + response.getData().getUsername());
 
 
                 },
                 error -> Log.e("MyAmplifyApp", "Create failed", error)
         );
+
+
     }
 
     private void saveAddress() {
@@ -111,7 +148,7 @@ public class Settings extends AppCompatActivity {
 
         preferenceEditor.putString(ADDRESS, username);
         preferenceEditor.apply();
-        Toast.makeText(this, "username is Saved", Toast.LENGTH_SHORT).show();
+
 
     }
 
@@ -127,14 +164,15 @@ public class Settings extends AppCompatActivity {
 
     public void query() {
         Amplify.API.query(
-                ModelQuery.list(team.class),
+                ModelQuery.list(Team.class),
                 teamsName -> {
-                    for (team note : teamsName.getData()) {
-                        Log.i(TAG, "<==================================>");
-                        Log.i(TAG, "The team name is => " + note.getName());
-                        arrayList.add(note.getName());
+                    for (Team team : teamsName.getData()) {
+
+                        arrayList.add(team);
+
                     }
 
+                    handler.sendEmptyMessage(1);
 
                 },
                 error -> Log.e(TAG, error.toString())
@@ -142,25 +180,4 @@ public class Settings extends AppCompatActivity {
 
     }
 
-    public void spinnerOnclick() {
-
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, arrayList);
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(arrayAdapter);
-        arrayAdapter.notifyDataSetChanged();
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-             String iteam=parent.getItemAtPosition(position).toString();
-                String tutorialsName = arrayList.get(position);
-                Toast.makeText(parent.getContext(), "Selected the postion of the item: " + iteam, Toast.LENGTH_LONG).show();
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-
-    }
 }

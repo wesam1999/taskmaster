@@ -5,13 +5,12 @@ query GetTask($id: ID!) {
     title
     body
     status
-    TeamTask
     createdAt
     updatedAt
     _version
     _deleted
     _lastChangedAt
-    teamListTasksId
+    teamListtasksId
   }
 }
 query ListTasks(
@@ -25,13 +24,12 @@ query ListTasks(
       title
       body
       status
-      TeamTask
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
-      teamListTasksId
+      teamListtasksId
     }
     nextToken
     startedAt
@@ -54,13 +52,12 @@ query SyncTasks(
       title
       body
       status
-      TeamTask
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
-      teamListTasksId
+      teamListtasksId
     }
     nextToken
     startedAt
@@ -70,36 +67,35 @@ query GetTeam($id: ID!) {
   getTeam(id: $id) {
     id
     name
-    listTasks {
+    listtasks {
       items {
         id
         title
         body
         status
-        TeamTask
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
-        teamListTasksId
+        teamListtasksId
       }
       nextToken
       startedAt
     }
-    listUser {
+    listusers {
       items {
         id
-        userName
-        TeamUser
+        username
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
-        teamListUserId
+        teamListusersId
       }
       nextToken
+      startedAt
     }
     createdAt
     updatedAt
@@ -117,12 +113,13 @@ query ListTeams(
     items {
       id
       name
-      listTasks {
+      listtasks {
         nextToken
         startedAt
       }
-      listUser {
+      listusers {
         nextToken
+        startedAt
       }
       createdAt
       updatedAt
@@ -149,12 +146,13 @@ query SyncTeams(
     items {
       id
       name
-      listTasks {
+      listtasks {
         nextToken
         startedAt
       }
-      listUser {
+      listusers {
         nextToken
+        startedAt
       }
       createdAt
       updatedAt
@@ -169,14 +167,13 @@ query SyncTeams(
 query GetUser($id: ID!) {
   getUser(id: $id) {
     id
-    userName
-    TeamUser
+    username
     createdAt
     updatedAt
     _version
     _deleted
     _lastChangedAt
-    teamListUserId
+    teamListusersId
   }
 }
 query ListUsers(
@@ -187,14 +184,13 @@ query ListUsers(
   listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
-      userName
-      TeamUser
+      username
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
-      teamListUserId
+      teamListusersId
     }
     nextToken
     startedAt
@@ -214,14 +210,13 @@ query SyncUsers(
   ) {
     items {
       id
-      userName
-      TeamUser
+      username
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
-      teamListUserId
+      teamListusersId
     }
     nextToken
     startedAt

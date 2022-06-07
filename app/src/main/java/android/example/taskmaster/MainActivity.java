@@ -27,7 +27,9 @@ import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.AWSDataStorePlugin;
 import com.amplifyframework.datastore.generated.model.Task;
-import com.amplifyframework.datastore.generated.model.team;
+import com.amplifyframework.datastore.generated.model.Team;
+import com.amplifyframework.datastore.generated.model.User;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -56,6 +58,16 @@ clickButton2.setOnClickListener(view -> {
     navigateToTaskModel();
 });
 
+//        Team team=Team.builder().name("team3").build();
+//        Amplify.API.mutate(
+//                ModelMutation.create(team),
+//                response -> {
+//                    Log.i("MyAmplifyApp", "Added Todo with id: " + response);
+//
+//
+//                },
+//                error -> Log.e("MyAmplifyApp", "Create failed", error)
+//        );
 
     }
 

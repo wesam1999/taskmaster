@@ -22,22 +22,21 @@ import android.widget.Toast;
 import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Task;
-import com.amplifyframework.datastore.generated.model.team;
+import com.amplifyframework.datastore.generated.model.Team;
+
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TaskModel extends AppCompatActivity {
     public static final String TASK_Array = "taskId";
-    public static final String tasknames = "address";
-    private static final String TAG = TaskModel.class.getName().toString();
+    private static final String TAG = TaskModel.class.getName();
 private Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ArrayList<Task> taskArrayList=new ArrayList<>();
         Intent intent1 = getIntent();
-        String taskId = intent1.getStringExtra(AddTask.TASK_ID);
         String userTeam= intent1.getStringExtra(Settings.USER_TEAM);
 
 
@@ -69,15 +68,15 @@ private Handler handler;
 
         }
         );
-
+        Log.i(TAG, "onCreate: userTeam:"+userTeam);
         Amplify.API.query(
-                ModelQuery.get(team.class,team.NAME.eq(userTeam).toString()),
+                ModelQuery.get(Team.class,userTeam),
                 TeamsTask -> {
-                    Log.i("haveData", "onCreate: "+TeamsTask.getData().toString());
+                    Log.i(TAG, "onCreate: new team:"+TeamsTask.getData());
                     for (Task task:
-                            TeamsTask.getData().getListTasks() ) {
+                            TeamsTask.getData().getListtasks() ) {
 
-                        Toast.makeText(this, "this the task of the", Toast.LENGTH_SHORT).show();
+
                         taskArrayList.add(task);
 
                     }
