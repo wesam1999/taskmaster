@@ -8,13 +8,12 @@ mutation CreateTask(
     title
     body
     status
-    TeamTask
     createdAt
     updatedAt
     _version
     _deleted
     _lastChangedAt
-    teamListTasksId
+    teamListtasksId
   }
 }
 mutation UpdateTask(
@@ -26,13 +25,12 @@ mutation UpdateTask(
     title
     body
     status
-    TeamTask
     createdAt
     updatedAt
     _version
     _deleted
     _lastChangedAt
-    teamListTasksId
+    teamListtasksId
   }
 }
 mutation DeleteTask(
@@ -44,13 +42,12 @@ mutation DeleteTask(
     title
     body
     status
-    TeamTask
     createdAt
     updatedAt
     _version
     _deleted
     _lastChangedAt
-    teamListTasksId
+    teamListtasksId
   }
 }
 mutation CreateTeam(
@@ -60,36 +57,35 @@ mutation CreateTeam(
   createTeam(input: $input, condition: $condition) {
     id
     name
-    listTasks {
+    listtasks {
       items {
         id
         title
         body
         status
-        TeamTask
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
-        teamListTasksId
+        teamListtasksId
       }
       nextToken
       startedAt
     }
-    listUser {
+    listusers {
       items {
         id
-        userName
-        TeamUser
+        username
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
-        teamListUserId
+        teamListusersId
       }
       nextToken
+      startedAt
     }
     createdAt
     updatedAt
@@ -105,36 +101,35 @@ mutation UpdateTeam(
   updateTeam(input: $input, condition: $condition) {
     id
     name
-    listTasks {
+    listtasks {
       items {
         id
         title
         body
         status
-        TeamTask
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
-        teamListTasksId
+        teamListtasksId
       }
       nextToken
       startedAt
     }
-    listUser {
+    listusers {
       items {
         id
-        userName
-        TeamUser
+        username
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
-        teamListUserId
+        teamListusersId
       }
       nextToken
+      startedAt
     }
     createdAt
     updatedAt
@@ -150,36 +145,35 @@ mutation DeleteTeam(
   deleteTeam(input: $input, condition: $condition) {
     id
     name
-    listTasks {
+    listtasks {
       items {
         id
         title
         body
         status
-        TeamTask
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
-        teamListTasksId
+        teamListtasksId
       }
       nextToken
       startedAt
     }
-    listUser {
+    listusers {
       items {
         id
-        userName
-        TeamUser
+        username
         createdAt
         updatedAt
         _version
         _deleted
         _lastChangedAt
-        teamListUserId
+        teamListusersId
       }
       nextToken
+      startedAt
     }
     createdAt
     updatedAt
@@ -194,14 +188,13 @@ mutation CreateUser(
 ) {
   createUser(input: $input, condition: $condition) {
     id
-    userName
-    TeamUser
+    username
     createdAt
     updatedAt
     _version
     _deleted
     _lastChangedAt
-    teamListUserId
+    teamListusersId
   }
 }
 mutation UpdateUser(
@@ -210,14 +203,13 @@ mutation UpdateUser(
 ) {
   updateUser(input: $input, condition: $condition) {
     id
-    userName
-    TeamUser
+    username
     createdAt
     updatedAt
     _version
     _deleted
     _lastChangedAt
-    teamListUserId
+    teamListusersId
   }
 }
 mutation DeleteUser(
@@ -226,13 +218,12 @@ mutation DeleteUser(
 ) {
   deleteUser(input: $input, condition: $condition) {
     id
-    userName
-    TeamUser
+    username
     createdAt
     updatedAt
     _version
     _deleted
     _lastChangedAt
-    teamListUserId
+    teamListusersId
   }
 }

@@ -17,16 +17,16 @@ import com.amplifyframework.core.model.query.predicate.QueryField;
 
 import static com.amplifyframework.core.model.query.predicate.QueryField.field;
 
-/** This is an auto generated class representing the team type in your schema. */
+/** This is an auto generated class representing the Team type in your schema. */
 @SuppressWarnings("all")
-@ModelConfig(pluralName = "teams")
-public final class team implements Model {
-  public static final QueryField ID = field("team", "id");
-  public static final QueryField NAME = field("team", "name");
+@ModelConfig(pluralName = "Teams")
+public final class Team implements Model {
+  public static final QueryField ID = field("Team", "id");
+  public static final QueryField NAME = field("Team", "name");
   private final @ModelField(targetType="ID", isRequired = true) String id;
   private final @ModelField(targetType="String") String name;
-  private final @ModelField(targetType="Task") @HasMany(associatedWith = "teamListTasksId", type = Task.class) List<Task> listTasks = null;
-  private final @ModelField(targetType="user") @HasMany(associatedWith = "teamListUserId", type = user.class) List<user> listUser = null;
+  private final @ModelField(targetType="Task") @HasMany(associatedWith = "teamListtasksId", type = Task.class) List<Task> listtasks = null;
+  private final @ModelField(targetType="User") @HasMany(associatedWith = "teamListusersId", type = User.class) List<User> listusers = null;
   private @ModelField(targetType="AWSDateTime", isReadOnly = true) Temporal.DateTime createdAt;
   private @ModelField(targetType="AWSDateTime", isReadOnly = true) Temporal.DateTime updatedAt;
   public String getId() {
@@ -37,12 +37,12 @@ public final class team implements Model {
       return name;
   }
   
-  public List<Task> getListTasks() {
-      return listTasks;
+  public List<Task> getListtasks() {
+      return listtasks;
   }
   
-  public List<user> getListUser() {
-      return listUser;
+  public List<User> getListusers() {
+      return listusers;
   }
   
   public Temporal.DateTime getCreatedAt() {
@@ -53,7 +53,7 @@ public final class team implements Model {
       return updatedAt;
   }
   
-  private team(String id, String name) {
+  private Team(String id, String name) {
     this.id = id;
     this.name = name;
   }
@@ -65,7 +65,7 @@ public final class team implements Model {
       } else if(obj == null || getClass() != obj.getClass()) {
         return false;
       } else {
-      team team = (team) obj;
+      Team team = (Team) obj;
       return ObjectsCompat.equals(getId(), team.getId()) &&
               ObjectsCompat.equals(getName(), team.getName()) &&
               ObjectsCompat.equals(getCreatedAt(), team.getCreatedAt()) &&
@@ -87,7 +87,7 @@ public final class team implements Model {
   @Override
    public String toString() {
     return new StringBuilder()
-      .append("team {")
+      .append("Team {")
       .append("id=" + String.valueOf(getId()) + ", ")
       .append("name=" + String.valueOf(getName()) + ", ")
       .append("createdAt=" + String.valueOf(getCreatedAt()) + ", ")
@@ -108,8 +108,8 @@ public final class team implements Model {
    * @param id the id of the existing item this instance will represent
    * @return an instance of this model with only ID populated
    */
-  public static team justId(String id) {
-    return new team(
+  public static Team justId(String id) {
+    return new Team(
       id,
       null
     );
@@ -120,7 +120,7 @@ public final class team implements Model {
       name);
   }
   public interface BuildStep {
-    team build();
+    Team build();
     BuildStep id(String id);
     BuildStep name(String name);
   }
@@ -130,10 +130,10 @@ public final class team implements Model {
     private String id;
     private String name;
     @Override
-     public team build() {
+     public Team build() {
         String id = this.id != null ? this.id : UUID.randomUUID().toString();
         
-        return new team(
+        return new Team(
           id,
           name);
     }

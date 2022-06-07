@@ -16,30 +16,24 @@ import com.amplifyframework.core.model.query.predicate.QueryField;
 
 import static com.amplifyframework.core.model.query.predicate.QueryField.field;
 
-/** This is an auto generated class representing the user type in your schema. */
+/** This is an auto generated class representing the User type in your schema. */
 @SuppressWarnings("all")
-@ModelConfig(pluralName = "users")
-public final class user implements Model {
-  public static final QueryField ID = field("user", "id");
-  public static final QueryField USER_NAME = field("user", "userName");
-  public static final QueryField TEAM_USER = field("user", "TeamUser");
-  public static final QueryField TEAM_LIST_USER_ID = field("user", "teamListUserId");
+@ModelConfig(pluralName = "Users")
+public final class User implements Model {
+  public static final QueryField ID = field("User", "id");
+  public static final QueryField USERNAME = field("User", "username");
+  public static final QueryField TEAM_LISTUSERS_ID = field("User", "teamListusersId");
   private final @ModelField(targetType="ID", isRequired = true) String id;
-  private final @ModelField(targetType="String") String userName;
-  private final @ModelField(targetType="String") String TeamUser;
+  private final @ModelField(targetType="String") String username;
   private @ModelField(targetType="AWSDateTime", isReadOnly = true) Temporal.DateTime createdAt;
   private @ModelField(targetType="AWSDateTime", isReadOnly = true) Temporal.DateTime updatedAt;
-  private final @ModelField(targetType="ID") String teamListUserId;
+  private final @ModelField(targetType="ID") String teamListusersId;
   public String getId() {
       return id;
   }
   
-  public String getUserName() {
-      return userName;
-  }
-  
-  public String getTeamUser() {
-      return TeamUser;
+  public String getUsername() {
+      return username;
   }
   
   public Temporal.DateTime getCreatedAt() {
@@ -50,15 +44,14 @@ public final class user implements Model {
       return updatedAt;
   }
   
-  public String getTeamListUserId() {
-      return teamListUserId;
+  public String getTeamListusersId() {
+      return teamListusersId;
   }
   
-  private user(String id, String userName, String TeamUser, String teamListUserId) {
+  private User(String id, String username, String teamListusersId) {
     this.id = id;
-    this.userName = userName;
-    this.TeamUser = TeamUser;
-    this.teamListUserId = teamListUserId;
+    this.username = username;
+    this.teamListusersId = teamListusersId;
   }
   
   @Override
@@ -68,13 +61,12 @@ public final class user implements Model {
       } else if(obj == null || getClass() != obj.getClass()) {
         return false;
       } else {
-      user user = (user) obj;
+      User user = (User) obj;
       return ObjectsCompat.equals(getId(), user.getId()) &&
-              ObjectsCompat.equals(getUserName(), user.getUserName()) &&
-              ObjectsCompat.equals(getTeamUser(), user.getTeamUser()) &&
+              ObjectsCompat.equals(getUsername(), user.getUsername()) &&
               ObjectsCompat.equals(getCreatedAt(), user.getCreatedAt()) &&
               ObjectsCompat.equals(getUpdatedAt(), user.getUpdatedAt()) &&
-              ObjectsCompat.equals(getTeamListUserId(), user.getTeamListUserId());
+              ObjectsCompat.equals(getTeamListusersId(), user.getTeamListusersId());
       }
   }
   
@@ -82,11 +74,10 @@ public final class user implements Model {
    public int hashCode() {
     return new StringBuilder()
       .append(getId())
-      .append(getUserName())
-      .append(getTeamUser())
+      .append(getUsername())
       .append(getCreatedAt())
       .append(getUpdatedAt())
-      .append(getTeamListUserId())
+      .append(getTeamListusersId())
       .toString()
       .hashCode();
   }
@@ -94,13 +85,12 @@ public final class user implements Model {
   @Override
    public String toString() {
     return new StringBuilder()
-      .append("user {")
+      .append("User {")
       .append("id=" + String.valueOf(getId()) + ", ")
-      .append("userName=" + String.valueOf(getUserName()) + ", ")
-      .append("TeamUser=" + String.valueOf(getTeamUser()) + ", ")
+      .append("username=" + String.valueOf(getUsername()) + ", ")
       .append("createdAt=" + String.valueOf(getCreatedAt()) + ", ")
       .append("updatedAt=" + String.valueOf(getUpdatedAt()) + ", ")
-      .append("teamListUserId=" + String.valueOf(getTeamListUserId()))
+      .append("teamListusersId=" + String.valueOf(getTeamListusersId()))
       .append("}")
       .toString();
   }
@@ -117,10 +107,9 @@ public final class user implements Model {
    * @param id the id of the existing item this instance will represent
    * @return an instance of this model with only ID populated
    */
-  public static user justId(String id) {
-    return new user(
+  public static User justId(String id) {
+    return new User(
       id,
-      null,
       null,
       null
     );
@@ -128,50 +117,40 @@ public final class user implements Model {
   
   public CopyOfBuilder copyOfBuilder() {
     return new CopyOfBuilder(id,
-      userName,
-      TeamUser,
-      teamListUserId);
+      username,
+      teamListusersId);
   }
   public interface BuildStep {
-    user build();
+    User build();
     BuildStep id(String id);
-    BuildStep userName(String userName);
-    BuildStep teamUser(String teamUser);
-    BuildStep teamListUserId(String teamListUserId);
+    BuildStep username(String username);
+    BuildStep teamListusersId(String teamListusersId);
   }
   
 
   public static class Builder implements BuildStep {
     private String id;
-    private String userName;
-    private String TeamUser;
-    private String teamListUserId;
+    private String username;
+    private String teamListusersId;
     @Override
-     public user build() {
+     public User build() {
         String id = this.id != null ? this.id : UUID.randomUUID().toString();
         
-        return new user(
+        return new User(
           id,
-          userName,
-          TeamUser,
-          teamListUserId);
+          username,
+          teamListusersId);
     }
     
     @Override
-     public BuildStep userName(String userName) {
-        this.userName = userName;
+     public BuildStep username(String username) {
+        this.username = username;
         return this;
     }
     
     @Override
-     public BuildStep teamUser(String teamUser) {
-        this.TeamUser = teamUser;
-        return this;
-    }
-    
-    @Override
-     public BuildStep teamListUserId(String teamListUserId) {
-        this.teamListUserId = teamListUserId;
+     public BuildStep teamListusersId(String teamListusersId) {
+        this.teamListusersId = teamListusersId;
         return this;
     }
     
@@ -187,26 +166,20 @@ public final class user implements Model {
   
 
   public final class CopyOfBuilder extends Builder {
-    private CopyOfBuilder(String id, String userName, String teamUser, String teamListUserId) {
+    private CopyOfBuilder(String id, String username, String teamListusersId) {
       super.id(id);
-      super.userName(userName)
-        .teamUser(teamUser)
-        .teamListUserId(teamListUserId);
+      super.username(username)
+        .teamListusersId(teamListusersId);
     }
     
     @Override
-     public CopyOfBuilder userName(String userName) {
-      return (CopyOfBuilder) super.userName(userName);
+     public CopyOfBuilder username(String username) {
+      return (CopyOfBuilder) super.username(username);
     }
     
     @Override
-     public CopyOfBuilder teamUser(String teamUser) {
-      return (CopyOfBuilder) super.teamUser(teamUser);
-    }
-    
-    @Override
-     public CopyOfBuilder teamListUserId(String teamListUserId) {
-      return (CopyOfBuilder) super.teamListUserId(teamListUserId);
+     public CopyOfBuilder teamListusersId(String teamListusersId) {
+      return (CopyOfBuilder) super.teamListusersId(teamListusersId);
     }
   }
   

@@ -1,10 +1,10 @@
 {
   "version": "1",
   "cognitoConfig": {
-    "identityPoolName": "taskmasterb545dc1f_identitypool_b545dc1f",
+    "identityPoolName": "taskmaster24c5ec3c_identitypool_24c5ec3c",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "taskmab545dc1f",
-    "userPoolName": "taskmasterb545dc1f_userpool_b545dc1f",
+    "resourceNameTruncated": "taskma24c5ec3c",
+    "userPoolName": "taskmaster24c5ec3c_userpool_24c5ec3c",
     "autoVerifiedAttributes": [
       "email"
     ],
@@ -31,10 +31,10 @@
     "userpoolClientReadAttributes": [
       "email"
     ],
-    "userpoolClientLambdaRole": "taskmab545dc1f_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "taskma24c5ec3c_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "b545dc1f",
-    "resourceName": "taskmasterb545dc1f",
+    "sharedId": "24c5ec3c",
+    "resourceName": "taskmaster24c5ec3c",
     "authSelections": "identityPoolAndUserPool",
     "useDefault": "default",
     "usernameAttributes": [

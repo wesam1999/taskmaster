@@ -159,7 +159,7 @@
                         ],
                         "type": {
                             "kind": "OBJECT",
-                            "name": "team",
+                            "name": "Team",
                             "ofType": null
                         },
                         "isDeprecated": false,
@@ -282,7 +282,7 @@
                         ],
                         "type": {
                             "kind": "OBJECT",
-                            "name": "user",
+                            "name": "User",
                             "ofType": null
                         },
                         "isDeprecated": false,
@@ -410,9 +410,13 @@
                         "description": null,
                         "args": [],
                         "type": {
-                            "kind": "SCALAR",
-                            "name": "ID",
-                            "ofType": null
+                            "kind": "NON_NULL",
+                            "name": null,
+                            "ofType": {
+                                "kind": "SCALAR",
+                                "name": "ID",
+                                "ofType": null
+                            }
                         },
                         "isDeprecated": false,
                         "deprecationReason": null
@@ -443,18 +447,6 @@
                     },
                     {
                         "name": "status",
-                        "description": null,
-                        "args": [],
-                        "type": {
-                            "kind": "SCALAR",
-                            "name": "String",
-                            "ofType": null
-                        },
-                        "isDeprecated": false,
-                        "deprecationReason": null
-                    },
-                    {
-                        "name": "TeamTask",
                         "description": null,
                         "args": [],
                         "type": {
@@ -542,7 +534,7 @@
                         "deprecationReason": null
                     },
                     {
-                        "name": "teamListTasksId",
+                        "name": "teamListtasksId",
                         "description": null,
                         "args": [],
                         "type": {
@@ -656,16 +648,6 @@
                         "defaultValue": null
                     },
                     {
-                        "name": "TeamTask",
-                        "description": null,
-                        "type": {
-                            "kind": "INPUT_OBJECT",
-                            "name": "ModelStringInput",
-                            "ofType": null
-                        },
-                        "defaultValue": null
-                    },
-                    {
                         "name": "and",
                         "description": null,
                         "type": {
@@ -704,7 +686,7 @@
                         "defaultValue": null
                     },
                     {
-                        "name": "teamListTasksId",
+                        "name": "teamListtasksId",
                         "description": null,
                         "type": {
                             "kind": "INPUT_OBJECT",
@@ -1221,7 +1203,7 @@
             },
             {
                 "kind": "OBJECT",
-                "name": "team",
+                "name": "Team",
                 "description": null,
                 "fields": [
                     {
@@ -1229,9 +1211,13 @@
                         "description": null,
                         "args": [],
                         "type": {
-                            "kind": "SCALAR",
-                            "name": "ID",
-                            "ofType": null
+                            "kind": "NON_NULL",
+                            "name": null,
+                            "ofType": {
+                                "kind": "SCALAR",
+                                "name": "ID",
+                                "ofType": null
+                            }
                         },
                         "isDeprecated": false,
                         "deprecationReason": null
@@ -1249,7 +1235,7 @@
                         "deprecationReason": null
                     },
                     {
-                        "name": "listTasks",
+                        "name": "listtasks",
                         "description": null,
                         "args": [
                             {
@@ -1302,7 +1288,7 @@
                         "deprecationReason": null
                     },
                     {
-                        "name": "listUser",
+                        "name": "listusers",
                         "description": null,
                         "args": [
                             {
@@ -1310,7 +1296,7 @@
                                 "description": null,
                                 "type": {
                                     "kind": "INPUT_OBJECT",
-                                    "name": "ModeluserFilterInput",
+                                    "name": "ModelUserFilterInput",
                                     "ofType": null
                                 },
                                 "defaultValue": null
@@ -1348,7 +1334,7 @@
                         ],
                         "type": {
                             "kind": "OBJECT",
-                            "name": "ModeluserConnection",
+                            "name": "ModelUserConnection",
                             "ofType": null
                         },
                         "isDeprecated": false,
@@ -1461,7 +1447,7 @@
             },
             {
                 "kind": "INPUT_OBJECT",
-                "name": "ModeluserFilterInput",
+                "name": "ModelUserFilterInput",
                 "description": null,
                 "fields": null,
                 "inputFields": [
@@ -1476,17 +1462,7 @@
                         "defaultValue": null
                     },
                     {
-                        "name": "userName",
-                        "description": null,
-                        "type": {
-                            "kind": "INPUT_OBJECT",
-                            "name": "ModelStringInput",
-                            "ofType": null
-                        },
-                        "defaultValue": null
-                    },
-                    {
-                        "name": "TeamUser",
+                        "name": "username",
                         "description": null,
                         "type": {
                             "kind": "INPUT_OBJECT",
@@ -1503,7 +1479,7 @@
                             "name": null,
                             "ofType": {
                                 "kind": "INPUT_OBJECT",
-                                "name": "ModeluserFilterInput",
+                                "name": "ModelUserFilterInput",
                                 "ofType": null
                             }
                         },
@@ -1517,7 +1493,7 @@
                             "name": null,
                             "ofType": {
                                 "kind": "INPUT_OBJECT",
-                                "name": "ModeluserFilterInput",
+                                "name": "ModelUserFilterInput",
                                 "ofType": null
                             }
                         },
@@ -1528,7 +1504,17 @@
                         "description": null,
                         "type": {
                             "kind": "INPUT_OBJECT",
-                            "name": "ModeluserFilterInput",
+                            "name": "ModelUserFilterInput",
+                            "ofType": null
+                        },
+                        "defaultValue": null
+                    },
+                    {
+                        "name": "teamListusersId",
+                        "description": null,
+                        "type": {
+                            "kind": "INPUT_OBJECT",
+                            "name": "ModelIDInput",
                             "ofType": null
                         },
                         "defaultValue": null
@@ -1540,7 +1526,7 @@
             },
             {
                 "kind": "OBJECT",
-                "name": "ModeluserConnection",
+                "name": "ModelUserConnection",
                 "description": null,
                 "fields": [
                     {
@@ -1555,7 +1541,7 @@
                                 "name": null,
                                 "ofType": {
                                     "kind": "OBJECT",
-                                    "name": "user",
+                                    "name": "User",
                                     "ofType": null
                                 }
                             }
@@ -1574,6 +1560,18 @@
                         },
                         "isDeprecated": false,
                         "deprecationReason": null
+                    },
+                    {
+                        "name": "startedAt",
+                        "description": null,
+                        "args": [],
+                        "type": {
+                            "kind": "SCALAR",
+                            "name": "AWSTimestamp",
+                            "ofType": null
+                        },
+                        "isDeprecated": false,
+                        "deprecationReason": null
                     }
                 ],
                 "inputFields": null,
@@ -1583,7 +1581,7 @@
             },
             {
                 "kind": "OBJECT",
-                "name": "user",
+                "name": "User",
                 "description": null,
                 "fields": [
                     {
@@ -1591,27 +1589,19 @@
                         "description": null,
                         "args": [],
                         "type": {
-                            "kind": "SCALAR",
-                            "name": "ID",
-                            "ofType": null
+                            "kind": "NON_NULL",
+                            "name": null,
+                            "ofType": {
+                                "kind": "SCALAR",
+                                "name": "ID",
+                                "ofType": null
+                            }
                         },
                         "isDeprecated": false,
                         "deprecationReason": null
                     },
                     {
-                        "name": "userName",
-                        "description": null,
-                        "args": [],
-                        "type": {
-                            "kind": "SCALAR",
-                            "name": "String",
-                            "ofType": null
-                        },
-                        "isDeprecated": false,
-                        "deprecationReason": null
-                    },
-                    {
-                        "name": "TeamUser",
+                        "name": "username",
                         "description": null,
                         "args": [],
                         "type": {
@@ -1699,7 +1689,7 @@
                         "deprecationReason": null
                     },
                     {
-                        "name": "teamListUserId",
+                        "name": "teamListusersId",
                         "description": null,
                         "args": [],
                         "type": {
@@ -1802,151 +1792,7 @@
                                 "name": null,
                                 "ofType": {
                                     "kind": "OBJECT",
-                                    "name": "team",
-                                    "ofType": null
-                                }
-                            }
-                        },
-                        "isDeprecated": false,
-                        "deprecationReason": null
-                    },
-                    {
-                        "name": "nextToken",
-                        "description": null,
-                        "args": [],
-                        "type": {
-                            "kind": "SCALAR",
-                            "name": "String",
-                            "ofType": null
-                        },
-                        "isDeprecated": false,
-                        "deprecationReason": null
-                    },
-                    {
-                        "name": "startedAt",
-                        "description": null,
-                        "args": [],
-                        "type": {
-                            "kind": "SCALAR",
-                            "name": "AWSTimestamp",
-                            "ofType": null
-                        },
-                        "isDeprecated": false,
-                        "deprecationReason": null
-                    }
-                ],
-                "inputFields": null,
-                "interfaces": [],
-                "enumValues": null,
-                "possibleTypes": null
-            },
-            {
-                "kind": "INPUT_OBJECT",
-                "name": "ModelUserFilterInput",
-                "description": null,
-                "fields": null,
-                "inputFields": [
-                    {
-                        "name": "id",
-                        "description": null,
-                        "type": {
-                            "kind": "INPUT_OBJECT",
-                            "name": "ModelIDInput",
-                            "ofType": null
-                        },
-                        "defaultValue": null
-                    },
-                    {
-                        "name": "userName",
-                        "description": null,
-                        "type": {
-                            "kind": "INPUT_OBJECT",
-                            "name": "ModelStringInput",
-                            "ofType": null
-                        },
-                        "defaultValue": null
-                    },
-                    {
-                        "name": "TeamUser",
-                        "description": null,
-                        "type": {
-                            "kind": "INPUT_OBJECT",
-                            "name": "ModelStringInput",
-                            "ofType": null
-                        },
-                        "defaultValue": null
-                    },
-                    {
-                        "name": "and",
-                        "description": null,
-                        "type": {
-                            "kind": "LIST",
-                            "name": null,
-                            "ofType": {
-                                "kind": "INPUT_OBJECT",
-                                "name": "ModelUserFilterInput",
-                                "ofType": null
-                            }
-                        },
-                        "defaultValue": null
-                    },
-                    {
-                        "name": "or",
-                        "description": null,
-                        "type": {
-                            "kind": "LIST",
-                            "name": null,
-                            "ofType": {
-                                "kind": "INPUT_OBJECT",
-                                "name": "ModelUserFilterInput",
-                                "ofType": null
-                            }
-                        },
-                        "defaultValue": null
-                    },
-                    {
-                        "name": "not",
-                        "description": null,
-                        "type": {
-                            "kind": "INPUT_OBJECT",
-                            "name": "ModelUserFilterInput",
-                            "ofType": null
-                        },
-                        "defaultValue": null
-                    },
-                    {
-                        "name": "teamListUserId",
-                        "description": null,
-                        "type": {
-                            "kind": "INPUT_OBJECT",
-                            "name": "ModelIDInput",
-                            "ofType": null
-                        },
-                        "defaultValue": null
-                    }
-                ],
-                "interfaces": null,
-                "enumValues": null,
-                "possibleTypes": null
-            },
-            {
-                "kind": "OBJECT",
-                "name": "ModelUserConnection",
-                "description": null,
-                "fields": [
-                    {
-                        "name": "items",
-                        "description": null,
-                        "args": [],
-                        "type": {
-                            "kind": "NON_NULL",
-                            "name": null,
-                            "ofType": {
-                                "kind": "LIST",
-                                "name": null,
-                                "ofType": {
-                                    "kind": "OBJECT",
-                                    "name": "user",
+                                    "name": "Team",
                                     "ofType": null
                                 }
                             }
@@ -2131,7 +1977,7 @@
                         ],
                         "type": {
                             "kind": "OBJECT",
-                            "name": "team",
+                            "name": "Team",
                             "ofType": null
                         },
                         "isDeprecated": false,
@@ -2168,7 +2014,7 @@
                         ],
                         "type": {
                             "kind": "OBJECT",
-                            "name": "team",
+                            "name": "Team",
                             "ofType": null
                         },
                         "isDeprecated": false,
@@ -2205,7 +2051,7 @@
                         ],
                         "type": {
                             "kind": "OBJECT",
-                            "name": "team",
+                            "name": "Team",
                             "ofType": null
                         },
                         "isDeprecated": false,
@@ -2242,7 +2088,7 @@
                         ],
                         "type": {
                             "kind": "OBJECT",
-                            "name": "user",
+                            "name": "User",
                             "ofType": null
                         },
                         "isDeprecated": false,
@@ -2279,7 +2125,7 @@
                         ],
                         "type": {
                             "kind": "OBJECT",
-                            "name": "user",
+                            "name": "User",
                             "ofType": null
                         },
                         "isDeprecated": false,
@@ -2316,7 +2162,7 @@
                         ],
                         "type": {
                             "kind": "OBJECT",
-                            "name": "user",
+                            "name": "User",
                             "ofType": null
                         },
                         "isDeprecated": false,
@@ -2375,16 +2221,6 @@
                         "defaultValue": null
                     },
                     {
-                        "name": "TeamTask",
-                        "description": null,
-                        "type": {
-                            "kind": "SCALAR",
-                            "name": "String",
-                            "ofType": null
-                        },
-                        "defaultValue": null
-                    },
-                    {
                         "name": "_version",
                         "description": null,
                         "type": {
@@ -2395,7 +2231,7 @@
                         "defaultValue": null
                     },
                     {
-                        "name": "teamListTasksId",
+                        "name": "teamListtasksId",
                         "description": null,
                         "type": {
                             "kind": "SCALAR",
@@ -2446,16 +2282,6 @@
                         "defaultValue": null
                     },
                     {
-                        "name": "TeamTask",
-                        "description": null,
-                        "type": {
-                            "kind": "INPUT_OBJECT",
-                            "name": "ModelStringInput",
-                            "ofType": null
-                        },
-                        "defaultValue": null
-                    },
-                    {
                         "name": "and",
                         "description": null,
                         "type": {
@@ -2494,7 +2320,7 @@
                         "defaultValue": null
                     },
                     {
-                        "name": "teamListTasksId",
+                        "name": "teamListtasksId",
                         "description": null,
                         "type": {
                             "kind": "INPUT_OBJECT",
@@ -2559,16 +2385,6 @@
                         "defaultValue": null
                     },
                     {
-                        "name": "TeamTask",
-                        "description": null,
-                        "type": {
-                            "kind": "SCALAR",
-                            "name": "String",
-                            "ofType": null
-                        },
-                        "defaultValue": null
-                    },
-                    {
                         "name": "_version",
                         "description": null,
                         "type": {
@@ -2579,7 +2395,7 @@
                         "defaultValue": null
                     },
                     {
-                        "name": "teamListTasksId",
+                        "name": "teamListtasksId",
                         "description": null,
                         "type": {
                             "kind": "SCALAR",
@@ -2825,17 +2641,7 @@
                         "defaultValue": null
                     },
                     {
-                        "name": "userName",
-                        "description": null,
-                        "type": {
-                            "kind": "SCALAR",
-                            "name": "String",
-                            "ofType": null
-                        },
-                        "defaultValue": null
-                    },
-                    {
-                        "name": "TeamUser",
+                        "name": "username",
                         "description": null,
                         "type": {
                             "kind": "SCALAR",
@@ -2855,7 +2661,7 @@
                         "defaultValue": null
                     },
                     {
-                        "name": "teamListUserId",
+                        "name": "teamListusersId",
                         "description": null,
                         "type": {
                             "kind": "SCALAR",
@@ -2876,17 +2682,7 @@
                 "fields": null,
                 "inputFields": [
                     {
-                        "name": "userName",
-                        "description": null,
-                        "type": {
-                            "kind": "INPUT_OBJECT",
-                            "name": "ModelStringInput",
-                            "ofType": null
-                        },
-                        "defaultValue": null
-                    },
-                    {
-                        "name": "TeamUser",
+                        "name": "username",
                         "description": null,
                         "type": {
                             "kind": "INPUT_OBJECT",
@@ -2934,7 +2730,7 @@
                         "defaultValue": null
                     },
                     {
-                        "name": "teamListUserId",
+                        "name": "teamListusersId",
                         "description": null,
                         "type": {
                             "kind": "INPUT_OBJECT",
@@ -2969,17 +2765,7 @@
                         "defaultValue": null
                     },
                     {
-                        "name": "userName",
-                        "description": null,
-                        "type": {
-                            "kind": "SCALAR",
-                            "name": "String",
-                            "ofType": null
-                        },
-                        "defaultValue": null
-                    },
-                    {
-                        "name": "TeamUser",
+                        "name": "username",
                         "description": null,
                         "type": {
                             "kind": "SCALAR",
@@ -2999,7 +2785,7 @@
                         "defaultValue": null
                     },
                     {
-                        "name": "teamListUserId",
+                        "name": "teamListusersId",
                         "description": null,
                         "type": {
                             "kind": "SCALAR",
@@ -3095,7 +2881,7 @@
                         "args": [],
                         "type": {
                             "kind": "OBJECT",
-                            "name": "team",
+                            "name": "Team",
                             "ofType": null
                         },
                         "isDeprecated": false,
@@ -3107,7 +2893,7 @@
                         "args": [],
                         "type": {
                             "kind": "OBJECT",
-                            "name": "team",
+                            "name": "Team",
                             "ofType": null
                         },
                         "isDeprecated": false,
@@ -3119,7 +2905,7 @@
                         "args": [],
                         "type": {
                             "kind": "OBJECT",
-                            "name": "team",
+                            "name": "Team",
                             "ofType": null
                         },
                         "isDeprecated": false,
@@ -3131,7 +2917,7 @@
                         "args": [],
                         "type": {
                             "kind": "OBJECT",
-                            "name": "user",
+                            "name": "User",
                             "ofType": null
                         },
                         "isDeprecated": false,
@@ -3143,7 +2929,7 @@
                         "args": [],
                         "type": {
                             "kind": "OBJECT",
-                            "name": "user",
+                            "name": "User",
                             "ofType": null
                         },
                         "isDeprecated": false,
@@ -3155,7 +2941,7 @@
                         "args": [],
                         "type": {
                             "kind": "OBJECT",
-                            "name": "user",
+                            "name": "User",
                             "ofType": null
                         },
                         "isDeprecated": false,
