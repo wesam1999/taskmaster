@@ -251,14 +251,11 @@ public class AddTask extends AppCompatActivity {
         Intent settingsIntent = new Intent(this, MainActivity.class);
         startActivity(settingsIntent);
     }
-//    private void pictureUpload() {
-//        // Launches photo picker in single-select mode.
-//        // This means that the user can select one photo or video.
-////        Intent intent = new Intent(Intent.ACTION_PICK);
-////        intent.setType("image/*");
-//
-//
-//
+    private void pictureUpload() {
+
+
+
+
 //
 //    Intent getIntent=getIntent();
 //    String string =getIntent.getAction();
@@ -280,100 +277,87 @@ public class AddTask extends AppCompatActivity {
 //        intent.setType("image/*");
 //        startActivityForResult(intent, REQUEST_CODE);
 //    }
-//
-//
-////        startActivityForResult(intent, REQUEST_CODE);
-//
-//
-//
-////        pictureDownload();
-//    }
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        if (resultCode != Activity.RESULT_OK) {
-//            // Handle error
-//            Log.e(TAG, "onActivityResult: Error getting image from device");
-//            return;
-//        }
-//
-//        switch(requestCode) {
-//            case REQUEST_CODE:
-//                // Get photo picker response for single select.
-//                Uri currentUri = data.getData();
-//
-//                // Do stuff with the photo/video URI.
-//                Log.i(TAG, "onActivityResult: the uri is => " + currentUri);
-//
-//                try {
-//                    Bitmap bitmap = getBitmapFromUri(currentUri);
-//
-//                    File file = new File(getApplicationContext().getFilesDir(), "image.jpg");
-//                    OutputStream os = new BufferedOutputStream(new FileOutputStream(file));
-//                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
-//                    os.close();
-//
-//                    // upload to s3
-//                    // uploads the file
-//                    Amplify.Storage.uploadFile(
-//                            "image.jpg",
-//                            file,
-//                            result -> Log.i(TAG, "Successfully uploaded: " + result.getKey()),
-//                            storageFailure -> Log.e(TAG, "Upload failed", storageFailure)
-//                    );
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//                return;
-//            case REQUEST_CODE_SEND:
-//                // Get photo picker response for single select.
-//                Uri currentUri1 = data.getData();
-//
-//                // Do stuff with the photo/video URI.
-//                Log.i(TAG, "onActivityResult: the uri is => " + currentUri1);
-//
-//                try {
-//                    Bitmap bitmap = getBitmapFromUri(currentUri1);
-//
-//                    File file = new File(getApplicationContext().getFilesDir(), "image.jpg");
-//                    OutputStream os = new BufferedOutputStream(new FileOutputStream(file));
-//                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
-//                    os.close();
-//
-//                    // upload to s3
-//                    // uploads the file
-//                    Amplify.Storage.uploadFile(
-//                            "image.jpg",
-//                            file,
-//                            result -> Log.i(TAG, "Successfully uploaded: " + result.getKey()),
-//                            storageFailure -> Log.e(TAG, "Upload failed", storageFailure)
-//                    );
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//                return;
-//        }
-//    }
-//    private Bitmap getBitmapFromUri(Uri uri) throws IOException {
-//        ParcelFileDescriptor parcelFileDescriptor =
-//                getContentResolver().openFileDescriptor(uri, "r");
-//        FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
-//        Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
-//        parcelFileDescriptor.close();
-//
-//        return image;
-//    }
-//    private void pictureDownload() {
-//        Amplify.Storage.downloadFile(
-//                "image.jpg",
-//                new File(getApplicationContext().getFilesDir() + "/download.jpg"),
-//                result -> {
-//                    Log.i(TAG, "The root path is: " + getApplicationContext().getFilesDir());
-//                    Log.i(TAG, "Successfully downloaded: " + result.getFile().getName());
-//                },
-//                error -> Log.e(TAG,  "Download Failure", error)
-//        );
-//    }
+
+        // Launches photo picker in single-select mode.
+        // This means that the user can select one photo or video.
+        Intent intent = new Intent();
+      String string=intent.getAction();
+        if(string.equals(Intent.ACTION_SEND)){
+            intent.setAction(Intent.ACTION_SEND);
+            intent.setType("image/*");
+
+            startActivityForResult(intent, REQUEST_CODE);
+        }else if (string.equals(Intent.ACTION_PICK) ){
+            intent.setAction(Intent.ACTION_PICK);
+            intent.setType("image/*");
+
+            startActivityForResult(intent, REQUEST_CODE);
+
+
+            pictureDownload();
+        }
+        }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode != Activity.RESULT_OK) {
+            // Handle error
+            Log.e(TAG, "onActivityResult: Error getting image from device");
+            return;
+        }
+
+        switch(requestCode) {
+            case REQUEST_CODE:
+                // Get photo picker response for single select.
+                Uri currentUri = data.getData();
+
+                // Do stuff with the photo/video URI.
+                Log.i(TAG, "onActivityResult: the uri is => " + currentUri);
+
+                try {
+                    Bitmap bitmap = getBitmapFromUri(currentUri);
+
+                    File file = new File(getApplicationContext().getFilesDir(), "image.jpg");
+                    OutputStream os = new BufferedOutputStream(new FileOutputStream(file));
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
+                    os.close();
+
+                    // upload to s3
+                    // uploads the file
+                    Amplify.Storage.uploadFile(
+                            "image.jpg",
+                            file,
+                            result -> Log.i(TAG, "Successfully uploaded: " + result.getKey()),
+                            storageFailure -> Log.e(TAG, "Upload failed", storageFailure)
+                    );
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return;
+
+        }
+    }
+    private Bitmap getBitmapFromUri(Uri uri) throws IOException {
+        ParcelFileDescriptor parcelFileDescriptor =
+                getContentResolver().openFileDescriptor(uri, "r");
+        FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+        Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
+        parcelFileDescriptor.close();
+
+        return image;
+    }
+    private void pictureDownload() {
+        Amplify.Storage.downloadFile(
+                "image.jpg",
+                new File(getApplicationContext().getFilesDir() + "/download.jpg"),
+                result -> {
+                    Log.i(TAG, "The root path is: " + getApplicationContext().getFilesDir());
+                    Log.i(TAG, "Successfully downloaded: " + result.getFile().getName());
+                },
+                error -> Log.e(TAG,  "Download Failure", error)
+        );
+    }
 }

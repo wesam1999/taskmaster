@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amplifyframework.AmplifyException;
+import com.amplifyframework.analytics.AnalyticsEvent;
 import com.amplifyframework.api.aws.AWSApiPlugin;
 import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.auth.AuthUser;
@@ -66,6 +67,17 @@ private Handler handler;
         Button Banner =findViewById(R.id.button5);
         Button Interstitial  =findViewById(R.id.button6);
         Button Rewarded  =findViewById(R.id.button7);
+//        AnalyticsEvent event = AnalyticsEvent.builder()
+//                .name("opendMyApplication")
+//                .addProperty("Successful", true)
+//                .addProperty("ProcessDuration", 792)
+//                .build();
+//
+//        Amplify.Analytics.recordEvent(event);
+
+
+
+
 
         Banner.setOnClickListener(view -> createBanner());
         Interstitial.setOnClickListener(view -> createInterstitial());
