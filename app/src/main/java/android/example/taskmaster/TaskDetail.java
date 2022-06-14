@@ -7,12 +7,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +46,7 @@ public class TaskDetail extends AppCompatActivity {
         textView3 = findViewById(R.id.textView6);
         Button speech=findViewById(R.id.button8);
         Button Translating=findViewById(R.id.button9);
+        ImageView ImageView=findViewById(R.id.imageView3);
 
         ActionBar actionBar = getSupportActionBar();
 
@@ -58,10 +61,16 @@ speech.setOnClickListener(view ->Text_to_speech() );
         String taskState = passedIntent.getStringExtra("taskstate");
         String taskBody = passedIntent.getStringExtra("taskBody");
 
+        String taskuri = passedIntent.getStringExtra("taskuri");
+        Uri ImageUri=Uri.parse(taskuri);
+
         textView.setText(tasks);
         textView2.setText(taskState);
         textView3.setText(taskBody);
-    }
+if (taskuri!=null) {
+    ImageView.setImageURI(ImageUri);
+}
+}
 
     private void Text_to_Translating() {
 

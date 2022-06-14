@@ -8,6 +8,7 @@ mutation CreateTask(
     title
     body
     status
+    UriImage
     createdAt
     updatedAt
     _version
@@ -25,6 +26,7 @@ mutation UpdateTask(
     title
     body
     status
+    UriImage
     createdAt
     updatedAt
     _version
@@ -42,6 +44,7 @@ mutation DeleteTask(
     title
     body
     status
+    UriImage
     createdAt
     updatedAt
     _version
@@ -63,6 +66,7 @@ mutation CreateTeam(
         title
         body
         status
+        UriImage
         createdAt
         updatedAt
         _version
@@ -107,6 +111,7 @@ mutation UpdateTeam(
         title
         body
         status
+        UriImage
         createdAt
         updatedAt
         _version
@@ -151,6 +156,7 @@ mutation DeleteTeam(
         title
         body
         status
+        UriImage
         createdAt
         updatedAt
         _version

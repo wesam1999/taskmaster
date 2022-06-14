@@ -5,6 +5,7 @@ subscription OnCreateTask {
     title
     body
     status
+    UriImage
     createdAt
     updatedAt
     _version
@@ -19,6 +20,7 @@ subscription OnUpdateTask {
     title
     body
     status
+    UriImage
     createdAt
     updatedAt
     _version
@@ -33,6 +35,7 @@ subscription OnDeleteTask {
     title
     body
     status
+    UriImage
     createdAt
     updatedAt
     _version
@@ -51,6 +54,7 @@ subscription OnCreateTeam {
         title
         body
         status
+        UriImage
         createdAt
         updatedAt
         _version
@@ -92,6 +96,7 @@ subscription OnUpdateTeam {
         title
         body
         status
+        UriImage
         createdAt
         updatedAt
         _version
@@ -133,6 +138,7 @@ subscription OnDeleteTeam {
         title
         body
         status
+        UriImage
         createdAt
         updatedAt
         _version

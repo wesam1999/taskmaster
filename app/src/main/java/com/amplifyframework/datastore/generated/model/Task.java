@@ -24,11 +24,13 @@ public final class Task implements Model {
   public static final QueryField TITLE = field("Task", "title");
   public static final QueryField BODY = field("Task", "body");
   public static final QueryField STATUS = field("Task", "status");
+  public static final QueryField URI_IMAGE = field("Task", "UriImage");
   public static final QueryField TEAM_LISTTASKS_ID = field("Task", "teamListtasksId");
   private final @ModelField(targetType="ID", isRequired = true) String id;
   private final @ModelField(targetType="String") String title;
   private final @ModelField(targetType="String") String body;
   private final @ModelField(targetType="String") String status;
+  private final @ModelField(targetType="String") String UriImage;
   private @ModelField(targetType="AWSDateTime", isReadOnly = true) Temporal.DateTime createdAt;
   private @ModelField(targetType="AWSDateTime", isReadOnly = true) Temporal.DateTime updatedAt;
   private final @ModelField(targetType="ID") String teamListtasksId;
@@ -48,6 +50,10 @@ public final class Task implements Model {
       return status;
   }
   
+  public String getUriImage() {
+      return UriImage;
+  }
+  
   public Temporal.DateTime getCreatedAt() {
       return createdAt;
   }
@@ -60,11 +66,12 @@ public final class Task implements Model {
       return teamListtasksId;
   }
   
-  private Task(String id, String title, String body, String status, String teamListtasksId) {
+  private Task(String id, String title, String body, String status, String UriImage, String teamListtasksId) {
     this.id = id;
     this.title = title;
     this.body = body;
     this.status = status;
+    this.UriImage = UriImage;
     this.teamListtasksId = teamListtasksId;
   }
   
@@ -80,6 +87,7 @@ public final class Task implements Model {
               ObjectsCompat.equals(getTitle(), task.getTitle()) &&
               ObjectsCompat.equals(getBody(), task.getBody()) &&
               ObjectsCompat.equals(getStatus(), task.getStatus()) &&
+              ObjectsCompat.equals(getUriImage(), task.getUriImage()) &&
               ObjectsCompat.equals(getCreatedAt(), task.getCreatedAt()) &&
               ObjectsCompat.equals(getUpdatedAt(), task.getUpdatedAt()) &&
               ObjectsCompat.equals(getTeamListtasksId(), task.getTeamListtasksId());
@@ -93,6 +101,7 @@ public final class Task implements Model {
       .append(getTitle())
       .append(getBody())
       .append(getStatus())
+      .append(getUriImage())
       .append(getCreatedAt())
       .append(getUpdatedAt())
       .append(getTeamListtasksId())
@@ -108,6 +117,7 @@ public final class Task implements Model {
       .append("title=" + String.valueOf(getTitle()) + ", ")
       .append("body=" + String.valueOf(getBody()) + ", ")
       .append("status=" + String.valueOf(getStatus()) + ", ")
+      .append("UriImage=" + String.valueOf(getUriImage()) + ", ")
       .append("createdAt=" + String.valueOf(getCreatedAt()) + ", ")
       .append("updatedAt=" + String.valueOf(getUpdatedAt()) + ", ")
       .append("teamListtasksId=" + String.valueOf(getTeamListtasksId()))
@@ -133,6 +143,7 @@ public final class Task implements Model {
       null,
       null,
       null,
+      null,
       null
     );
   }
@@ -142,6 +153,7 @@ public final class Task implements Model {
       title,
       body,
       status,
+      UriImage,
       teamListtasksId);
   }
   public interface BuildStep {
@@ -150,6 +162,7 @@ public final class Task implements Model {
     BuildStep title(String title);
     BuildStep body(String body);
     BuildStep status(String status);
+    BuildStep uriImage(String uriImage);
     BuildStep teamListtasksId(String teamListtasksId);
   }
   
@@ -159,6 +172,7 @@ public final class Task implements Model {
     private String title;
     private String body;
     private String status;
+    private String UriImage;
     private String teamListtasksId;
     @Override
      public Task build() {
@@ -169,6 +183,7 @@ public final class Task implements Model {
           title,
           body,
           status,
+          UriImage,
           teamListtasksId);
     }
     
@@ -191,6 +206,12 @@ public final class Task implements Model {
     }
     
     @Override
+     public BuildStep uriImage(String uriImage) {
+        this.UriImage = uriImage;
+        return this;
+    }
+    
+    @Override
      public BuildStep teamListtasksId(String teamListtasksId) {
         this.teamListtasksId = teamListtasksId;
         return this;
@@ -208,11 +229,12 @@ public final class Task implements Model {
   
 
   public final class CopyOfBuilder extends Builder {
-    private CopyOfBuilder(String id, String title, String body, String status, String teamListtasksId) {
+    private CopyOfBuilder(String id, String title, String body, String status, String uriImage, String teamListtasksId) {
       super.id(id);
       super.title(title)
         .body(body)
         .status(status)
+        .uriImage(uriImage)
         .teamListtasksId(teamListtasksId);
     }
     
@@ -229,6 +251,11 @@ public final class Task implements Model {
     @Override
      public CopyOfBuilder status(String status) {
       return (CopyOfBuilder) super.status(status);
+    }
+    
+    @Override
+     public CopyOfBuilder uriImage(String uriImage) {
+      return (CopyOfBuilder) super.uriImage(uriImage);
     }
     
     @Override

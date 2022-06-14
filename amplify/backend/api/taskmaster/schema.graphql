@@ -7,7 +7,7 @@ type Task @model {
   title: String
   body: String
   status: String
-
+UriImage :String
 }
 
 type Team @model {

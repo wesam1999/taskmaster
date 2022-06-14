@@ -62,6 +62,7 @@ public class AddTask extends AppCompatActivity {
     private ArrayList<String> spinnerlist;
     private Button uplode_file;
     private Task newTask;
+    private Uri currentUri=null;
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -79,8 +80,8 @@ public class AddTask extends AppCompatActivity {
         spinner = findViewById(R.id.spinner);
         titleFild = findViewById(R.id.editTextTextPersonName);
         bodyFild = findViewById(R.id.editTextTextPersonName2);
-//        uplode_file = findViewById(R.id.buttonDownload);
-//        uplode_file.setOnClickListener(view->pictureUpload());
+        uplode_file = findViewById(R.id.buttonDownload);
+        uplode_file.setOnClickListener(view->pictureUpload());
 
 
         handle();
@@ -112,6 +113,7 @@ public class AddTask extends AppCompatActivity {
                             status(state).
                             body(body)
                             .teamListtasksId(arrayListspinner3.get(i).getId())
+                            .uriImage(currentUri.toString())
                             .build();
                     arrayListspinner3.get(i).getListtasks().add(newTask);
 
@@ -281,22 +283,31 @@ public class AddTask extends AppCompatActivity {
 
         // Launches photo picker in single-select mode.
         // This means that the user can select one photo or video.
-        Intent intent = new Intent();
-      String string=intent.getAction();
-        if(string.equals(Intent.ACTION_SEND)){
-            intent.setAction(Intent.ACTION_SEND);
-            intent.setType("image/*");
+//        Intent intent = new Intent();
+//      String string=intent.getAction();
+//        if(string.equals(Intent.ACTION_SEND)){
+//            intent.setAction(Intent.ACTION_SEND);
+//            intent.setType("image/*");
+//
+//            startActivityForResult(intent, REQUEST_CODE);
+//        }else if (string.equals(Intent.ACTION_PICK) ){
+//            intent.setAction(Intent.ACTION_PICK);
+//            intent.setType("image/*");
+//
+//            startActivityForResult(intent, REQUEST_CODE);
+//
+//
+//            pictureDownload();
+//        }
+//
 
-            startActivityForResult(intent, REQUEST_CODE);
-        }else if (string.equals(Intent.ACTION_PICK) ){
-            intent.setAction(Intent.ACTION_PICK);
-            intent.setType("image/*");
 
-            startActivityForResult(intent, REQUEST_CODE);
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, REQUEST_CODE);
 
 
-            pictureDownload();
-        }
+
         }
 
     @Override
@@ -312,7 +323,7 @@ public class AddTask extends AppCompatActivity {
         switch(requestCode) {
             case REQUEST_CODE:
                 // Get photo picker response for single select.
-                Uri currentUri = data.getData();
+                currentUri = data.getData();
 
                 // Do stuff with the photo/video URI.
                 Log.i(TAG, "onActivityResult: the uri is => " + currentUri);
@@ -320,7 +331,7 @@ public class AddTask extends AppCompatActivity {
                 try {
                     Bitmap bitmap = getBitmapFromUri(currentUri);
 
-                    File file = new File(getApplicationContext().getFilesDir(), "image.jpg");
+                    File file = new File(getApplicationContext().getFilesDir(), "image1.jpg");
                     OutputStream os = new BufferedOutputStream(new FileOutputStream(file));
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
                     os.close();
