@@ -2,7 +2,7 @@
   "version": "1",
   "cognitoConfig": {
     "identityPoolName": "taskmaster24c5ec3c_identitypool_24c5ec3c",
-    "allowUnauthenticatedIdentities": true,
+    "allowUnauthenticatedIdentities": false,
     "resourceNameTruncated": "taskma24c5ec3c",
     "userPoolName": "taskmaster24c5ec3c_userpool_24c5ec3c",
     "autoVerifiedAttributes": [
@@ -36,7 +36,7 @@
     "sharedId": "24c5ec3c",
     "resourceName": "taskmaster24c5ec3c",
     "authSelections": "identityPoolAndUserPool",
-    "useDefault": "manual",
+    "useDefault": "default",
     "usernameAttributes": [
       "email"
     ],
@@ -58,15 +58,14 @@
     },
     "breakCircularDependency": true,
     "dependsOn": [],
-    "thirdPartyAuth": false,
     "userPoolGroups": false,
     "adminQueries": false,
     "triggers": {},
     "hostedUI": false,
-    "authProviders": [],
     "parentStack": {
       "Ref": "AWS::StackId"
     },
-    "permissions": []
+    "permissions": [],
+    "authProviders": []
   }
 }
