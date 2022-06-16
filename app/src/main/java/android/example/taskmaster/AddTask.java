@@ -229,9 +229,9 @@ public class AddTask extends AppCompatActivity {
 
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-//            case android.R.id.home:
-//                this.finish();
-//                return true;
+            case android.R.id.home:
+                this.finish();
+                return true;
             case R.id.action_mainpage:
                 navigateToMain();
                 return true;
@@ -364,7 +364,7 @@ public class AddTask extends AppCompatActivity {
         Amplify.Storage.downloadFile(
                 "image.jpg",
                 new File(getApplicationContext().getFilesDir() + "/download.jpg"),
-                result -> {
+                result -> {result.getFile().toURI();
                     Log.i(TAG, "The root path is: " + getApplicationContext().getFilesDir());
                     Log.i(TAG, "Successfully downloaded: " + result.getFile().getName());
                 },
