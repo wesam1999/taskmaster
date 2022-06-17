@@ -39,8 +39,10 @@ import com.amplifyframework.datastore.generated.model.Team;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileDescriptor;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -63,6 +65,8 @@ public class AddTask extends AppCompatActivity {
     private Button uplode_file;
     private Task newTask;
     private Uri currentUri=null;
+    private String fileName;
+    private Uri fileData;
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -113,7 +117,7 @@ public class AddTask extends AppCompatActivity {
                             status(state).
                             body(body)
                             .teamListtasksId(arrayListspinner3.get(i).getId())
-                            .uriImage(currentUri.toString())
+                            .uriImage(fileName)
                             .build();
                     arrayListspinner3.get(i).getListtasks().add(newTask);
 
@@ -254,57 +258,24 @@ public class AddTask extends AppCompatActivity {
         startActivity(settingsIntent);
     }
     private void pictureUpload() {
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        String type = intent.getType();
+        if(Intent.ACTION_SEND.equals(action) && type != null){
+        if (type.startsWith("image/")) {
+            intent.setAction(Intent.ACTION_SEND);
+            intent.setType("image/*");
 
+              add_image_to_S3(intent);
+    }
+        }else if (Intent.ACTION_PICK.equals(action) && type != null){
+    if (type.startsWith("image/")) {
+            intent.setAction(Intent.ACTION_PICK);
+            intent.setType("image/*");
+            startActivityForResult(intent, REQUEST_CODE);
+}
+        }
 
-
-
-//
-//    Intent getIntent=getIntent();
-//    String string =getIntent.getAction();
-//    String getIntenttype=getIntent.getType();
-//    if(string.equals(Intent.ACTION_SEND)){
-//        if(getIntenttype.startsWith("image/")){
-//            Uri imageUri=getIntent.getParcelableExtra(Intent.EXTRA_STREAM);
-//            if(imageUri!=null){
-//getIntent.setType("image/*");
-//                startActivityForResult(getIntent, REQUEST_CODE_SEND);
-//
-//            }
-//
-//
-//        }
-//    }
-//else if (string.equals(Intent.ACTION_PICK)){
-//        Intent intent = new Intent(Intent.ACTION_PICK);
-//        intent.setType("image/*");
-//        startActivityForResult(intent, REQUEST_CODE);
-//    }
-
-
-        // Launches photo picker in single-select mode.
-        // This means that the user can select one photo or video.
-//        Intent intent = new Intent();
-//      String string=intent.getAction();
-//        if(string.equals(Intent.ACTION_SEND)){
-//            intent.setAction(Intent.ACTION_SEND);
-//            intent.setType("image/*");
-//
-//            startActivityForResult(intent, REQUEST_CODE);
-//        }else if (string.equals(Intent.ACTION_PICK) ){
-//            intent.setAction(Intent.ACTION_PICK);
-//            intent.setType("image/*");
-//
-//            startActivityForResult(intent, REQUEST_CODE);
-//
-//
-//            pictureDownload();
-//        }
-//
-
-
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType("image/*");
-        startActivityForResult(intent, REQUEST_CODE);
 
 
 
@@ -312,8 +283,12 @@ public class AddTask extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
 
+
+        super.onActivityResult(requestCode, resultCode, data);
+        File file1 = new File(data.getData().getPath());
+        fileName = file1.getName();
+        fileData = data.getData();
         if (resultCode != Activity.RESULT_OK) {
             // Handle error
             Log.e(TAG, "onActivityResult: Error getting image from device");
@@ -321,7 +296,7 @@ public class AddTask extends AppCompatActivity {
         }
 
         switch(requestCode) {
-            case REQUEST_CODE:
+            case REQUEST_CODE_SEND:
                 // Get photo picker response for single select.
                 currentUri = data.getData();
 
@@ -349,7 +324,15 @@ public class AddTask extends AppCompatActivity {
                 }
                 return;
 
+
         }
+
+
+
+
+
+
+
     }
     private Bitmap getBitmapFromUri(Uri uri) throws IOException {
         ParcelFileDescriptor parcelFileDescriptor =
@@ -360,15 +343,26 @@ public class AddTask extends AppCompatActivity {
 
         return image;
     }
-    private void pictureDownload() {
-        Amplify.Storage.downloadFile(
-                "image.jpg",
-                new File(getApplicationContext().getFilesDir() + "/download.jpg"),
-                result -> {result.getFile().toURI();
-                    Log.i(TAG, "The root path is: " + getApplicationContext().getFilesDir());
-                    Log.i(TAG, "Successfully downloaded: " + result.getFile().getName());
-                },
-                error -> Log.e(TAG,  "Download Failure", error)
-        );
+
+
+    public void add_image_to_S3(Intent intent) {
+        Uri imageUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
+        File file = new File(imageUri.getPath());
+        fileName=file.getName();
+        if (imageUri != null) {
+
+            try {
+                InputStream exampleInputStream = getContentResolver().openInputStream(imageUri);
+                Amplify.Storage.uploadInputStream(
+                        fileName,
+                        exampleInputStream,
+                        result -> Log.i("TaskMaster", "Successfully uploaded: " + result.getKey()),
+                        storageFailure -> Log.e("TaskMaster", "Upload failed", storageFailure)
+                );
+            } catch (FileNotFoundException error) {
+                Log.e("TaskMaster", "Could not find file to open for input stream.", error);
+            }
+        }
+        Toast.makeText(getApplicationContext(),imageUri.getPath(),Toast.LENGTH_SHORT).show();
     }
 }

@@ -1,5 +1,7 @@
 package android.example.taskmaster;
 
+import static android.net.Uri.fromFile;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,15 +11,14 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -48,15 +49,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.time.Instant;
+import java.net.URI;
 
 public class TaskDetail extends AppCompatActivity  implements OnMapReadyCallback {
 
+    private static final String TAG = TaskDetail.class.getName();
     private final MediaPlayer mp = new MediaPlayer();
     private TextView textView2;
     private TextView textView;
     private TextView textView3;
-
+    private Uri uriImage;
 
 
     // initializing
@@ -86,6 +88,16 @@ public class TaskDetail extends AppCompatActivity  implements OnMapReadyCallback
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(coordinate, 12.0f));
         }
     };
+    private String taskuri;
+    private ImageView imageView;
+    private Handler handler= new Handler(
+            Looper.getMainLooper(), msg -> {
+imageView.setImageURI(uriImage);
+        return true;
+
+    }
+    );
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +109,7 @@ public class TaskDetail extends AppCompatActivity  implements OnMapReadyCallback
         textView3 = findViewById(R.id.textView6);
         Button speech=findViewById(R.id.button8);
         Button Translating=findViewById(R.id.button9);
-        ImageView ImageView=findViewById(R.id.imageView3);
+        imageView = findViewById(R.id.imageView3);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         ActionBar actionBar = getSupportActionBar();
 
@@ -120,14 +132,14 @@ speech.setOnClickListener(view ->Text_to_speech() );
         String taskState = passedIntent.getStringExtra("taskstate");
         String taskBody = passedIntent.getStringExtra("taskBody");
 
-        String taskuri = passedIntent.getStringExtra("taskuri");
-//        Uri ImageUri=(Uri) Uri.parse(taskuri);
+        taskuri = passedIntent.getStringExtra("taskuri");
+
 
         textView.setText(tasks);
         textView2.setText(taskState);
         textView3.setText(taskBody);
-if (taskuri!=null) {
-//    ImageView.setImageURI(ImageUri);
+if (taskuri !=null) {
+    pictureDownload();
 }
 }
 
@@ -345,5 +357,18 @@ public void Text_to_speech(){
         if (checkPermissions()) {
             getLastLocation();
         }
+    }
+    private void pictureDownload() {
+        Amplify.Storage.downloadFile(
+                taskuri,
+                new File(getApplicationContext().getFilesDir() + "/download.jpg"),
+                result -> {
+                    uriImage = fromFile(result.getFile());
+                    handler.sendEmptyMessage(1);
+                    Log.i(TAG, "The root path is: " + getApplicationContext().getFilesDir());
+                    Log.i(TAG, "Successfully downloaded: " + result.getFile().getName());
+                },
+                error -> Log.e(TAG,  "Download Failure", error)
+        );
     }
 }
