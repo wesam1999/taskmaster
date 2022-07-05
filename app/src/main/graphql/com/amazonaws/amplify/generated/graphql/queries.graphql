@@ -1,228 +1,26 @@
 # this is an auto generated file. This will be overwritten
-query GetTask($id: ID!) {
-  getTask(id: $id) {
-    id
-    title
-    body
-    status
-    UriImage
-    createdAt
-    updatedAt
-    _version
-    _deleted
-    _lastChangedAt
-    teamListtasksId
-  }
-}
-query ListTasks(
-  $filter: ModelTaskFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  listTasks(filter: $filter, limit: $limit, nextToken: $nextToken) {
-    items {
-      id
-      title
-      body
-      status
-      UriImage
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-      teamListtasksId
-    }
-    nextToken
-    startedAt
-  }
-}
-query SyncTasks(
-  $filter: ModelTaskFilterInput
-  $limit: Int
-  $nextToken: String
-  $lastSync: AWSTimestamp
-) {
-  syncTasks(
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
-    lastSync: $lastSync
-  ) {
-    items {
-      id
-      title
-      body
-      status
-      UriImage
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-      teamListtasksId
-    }
-    nextToken
-    startedAt
-  }
-}
-query GetTeam($id: ID!) {
-  getTeam(id: $id) {
+query GetTodo($id: ID!) {
+  getTodo(id: $id) {
     id
     name
-    listtasks {
-      items {
-        id
-        title
-        body
-        status
-        UriImage
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        teamListtasksId
-      }
-      nextToken
-      startedAt
-    }
-    listusers {
-      items {
-        id
-        username
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        teamListusersId
-      }
-      nextToken
-      startedAt
-    }
+    description
     createdAt
     updatedAt
-    _version
-    _deleted
-    _lastChangedAt
   }
 }
-query ListTeams(
-  $filter: ModelTeamFilterInput
+query ListTodos(
+  $filter: ModelTodoFilterInput
   $limit: Int
   $nextToken: String
 ) {
-  listTeams(filter: $filter, limit: $limit, nextToken: $nextToken) {
+  listTodos(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
       name
-      listtasks {
-        nextToken
-        startedAt
-      }
-      listusers {
-        nextToken
-        startedAt
-      }
+      description
       createdAt
       updatedAt
-      _version
-      _deleted
-      _lastChangedAt
     }
     nextToken
-    startedAt
-  }
-}
-query SyncTeams(
-  $filter: ModelTeamFilterInput
-  $limit: Int
-  $nextToken: String
-  $lastSync: AWSTimestamp
-) {
-  syncTeams(
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
-    lastSync: $lastSync
-  ) {
-    items {
-      id
-      name
-      listtasks {
-        nextToken
-        startedAt
-      }
-      listusers {
-        nextToken
-        startedAt
-      }
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-    }
-    nextToken
-    startedAt
-  }
-}
-query GetUser($id: ID!) {
-  getUser(id: $id) {
-    id
-    username
-    createdAt
-    updatedAt
-    _version
-    _deleted
-    _lastChangedAt
-    teamListusersId
-  }
-}
-query ListUsers(
-  $filter: ModelUserFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
-    items {
-      id
-      username
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-      teamListusersId
-    }
-    nextToken
-    startedAt
-  }
-}
-query SyncUsers(
-  $filter: ModelUserFilterInput
-  $limit: Int
-  $nextToken: String
-  $lastSync: AWSTimestamp
-) {
-  syncUsers(
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
-    lastSync: $lastSync
-  ) {
-    items {
-      id
-      username
-      createdAt
-      updatedAt
-      _version
-      _deleted
-      _lastChangedAt
-      teamListusersId
-    }
-    nextToken
-    startedAt
   }
 }

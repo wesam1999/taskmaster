@@ -1,15 +1,22 @@
 package android.example.taskmaster;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,6 +24,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.os.ParcelFileDescriptor;
+import android.service.controls.actions.FloatAction;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,6 +42,12 @@ import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Task;
 import com.amplifyframework.datastore.generated.model.Team;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 
 import java.io.BufferedOutputStream;
@@ -47,7 +61,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-public class AddTask extends AppCompatActivity {
+public class AddTask extends AppCompatActivity implements OnMapReadyCallback {
     public static final String TASK_ID = "taskId";
     public static final int REQUEST_CODE = 123;
     private static final int REQUEST_CODE_SEND = 4567;
@@ -64,10 +78,14 @@ public class AddTask extends AppCompatActivity {
     private ArrayList<String> spinnerlist;
     private Button uplode_file;
     private Task newTask;
-    private Uri currentUri=null;
-    private String fileName;
-    private Uri fileData;
 
+    private String fileName;
+
+    private FusedLocationProviderClient fusedLocationClient;
+    private int PERMISSION_ID = 44;
+    private Location userLocationData;
+    private String imageKey = "" ;
+    private GoogleMap googleMap;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -85,7 +103,16 @@ public class AddTask extends AppCompatActivity {
         titleFild = findViewById(R.id.editTextTextPersonName);
         bodyFild = findViewById(R.id.editTextTextPersonName2);
         uplode_file = findViewById(R.id.buttonDownload);
-        uplode_file.setOnClickListener(view->pictureUpload());
+
+        FloatingActionButton floatingActionButton=findViewById(R.id.fab_add_location_task);
+        floatingActionButton.setOnClickListener(view -> {
+
+            requestUserPermission();
+            fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+            getUserLocation();
+
+        });
+        uplode_file.setOnClickListener(view->uploadImage());
 
 
         handle();
@@ -117,7 +144,9 @@ public class AddTask extends AppCompatActivity {
                             status(state).
                             body(body)
                             .teamListtasksId(arrayListspinner3.get(i).getId())
-                            .uriImage(fileName)
+                            .uriImage(imageKey)
+                            .locationLatitude(userLocationData.getLatitude())
+                            .locationLongitude(userLocationData.getLongitude())
                             .build();
                     arrayListspinner3.get(i).getListtasks().add(newTask);
 
@@ -257,38 +286,29 @@ public class AddTask extends AppCompatActivity {
         Intent settingsIntent = new Intent(this, MainActivity.class);
         startActivity(settingsIntent);
     }
-    private void pictureUpload() {
+    public void uploadImage(){
         Intent intent = getIntent();
         String action = intent.getAction();
         String type = intent.getType();
         if(Intent.ACTION_SEND.equals(action) && type != null){
-        if (type.startsWith("image/")) {
-            intent.setAction(Intent.ACTION_SEND);
-            intent.setType("image/*");
+            if (type.startsWith("image/")) {
+                intent.setAction(Intent.ACTION_SEND);
+                intent.setType("image/*");
 
-              add_image_to_S3(intent);
+                add_image_to_S3(intent);
+            }
+        }else {
+
+            Intent intent1=new Intent(Intent.ACTION_PICK);
+            intent1.setType("image/*");
+            startActivityForResult(intent1, REQUEST_CODE);
+
+        }
     }
-        }else if (Intent.ACTION_PICK.equals(action) && type != null){
-    if (type.startsWith("image/")) {
-            intent.setAction(Intent.ACTION_PICK);
-            intent.setType("image/*");
-            startActivityForResult(intent, REQUEST_CODE);
-}
-        }
-
-
-
-
-        }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-
-
         super.onActivityResult(requestCode, resultCode, data);
-        File file1 = new File(data.getData().getPath());
-        fileName = file1.getName();
-        fileData = data.getData();
         if (resultCode != Activity.RESULT_OK) {
             // Handle error
             Log.e(TAG, "onActivityResult: Error getting image from device");
@@ -296,45 +316,19 @@ public class AddTask extends AppCompatActivity {
         }
 
         switch(requestCode) {
-            case REQUEST_CODE_SEND:
+            case REQUEST_CODE:
                 // Get photo picker response for single select.
-                currentUri = data.getData();
+                Uri currentUri = data.getData();
 
-                // Do stuff with the photo/video URI.
-                Log.i(TAG, "onActivityResult: the uri is => " + currentUri);
+                // Upload image to S3
+                imageS3upload(currentUri);
 
-                try {
-                    Bitmap bitmap = getBitmapFromUri(currentUri);
-
-                    File file = new File(getApplicationContext().getFilesDir(), "image1.jpg");
-                    OutputStream os = new BufferedOutputStream(new FileOutputStream(file));
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
-                    os.close();
-
-                    // upload to s3
-                    // uploads the file
-                    Amplify.Storage.uploadFile(
-                            "image.jpg",
-                            file,
-                            result -> Log.i(TAG, "Successfully uploaded: " + result.getKey()),
-                            storageFailure -> Log.e(TAG, "Upload failed", storageFailure)
-                    );
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
                 return;
-
-
         }
-
-
-
-
-
-
-
     }
+
     private Bitmap getBitmapFromUri(Uri uri) throws IOException {
+
         ParcelFileDescriptor parcelFileDescriptor =
                 getContentResolver().openFileDescriptor(uri, "r");
         FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
@@ -343,6 +337,38 @@ public class AddTask extends AppCompatActivity {
 
         return image;
     }
+    private void imageS3upload(Uri currentUri){
+        Bitmap bitmap = null;
+        String currentUriStr = String.valueOf(currentUri.getLastPathSegment())  + ".jpg";
+        Log.i("CurrentURI" , currentUriStr);
+        try {
+            bitmap = getBitmapFromUri(currentUri);
+            File file = new File(getApplicationContext().getFilesDir(), currentUriStr );
+            OutputStream os = new BufferedOutputStream(new FileOutputStream(file));
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
+            os.close();
+
+            // upload to s3
+            // uploads the file
+            Amplify.Storage.uploadFile(
+                    currentUriStr,
+                    file,
+                    result -> {
+                        Log.i(TAG, "Successfully uploaded: " + result.getKey()) ;
+                        imageKey = result.getKey();
+                        Toast.makeText(getApplicationContext(), "Image Uploaded", Toast.LENGTH_SHORT).show();
+                    },
+                    storageFailure -> Log.e(TAG, "Upload failed", storageFailure)
+            );
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+
 
 
     public void add_image_to_S3(Intent intent) {
@@ -364,5 +390,45 @@ public class AddTask extends AppCompatActivity {
             }
         }
         Toast.makeText(getApplicationContext(),imageUri.getPath(),Toast.LENGTH_SHORT).show();
+    }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void requestUserPermission() {
+        ActivityCompat.requestPermissions(this, new String[]{
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_ID);
+
+    }
+
+    @SuppressLint("MissingPermission")
+    private void getUserLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            return;
+        }
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+
+
+
+                    @Override
+                    public void onSuccess(Location location) {
+
+                        if (location != null) {
+
+                            userLocationData = location;
+                        }
+                    }
+                });
+    }
+
+
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+        this.googleMap = googleMap;
+        this.googleMap.setBuildingsEnabled(true);
+        this.googleMap.setTrafficEnabled(true);
+        this.googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
     }
 }

@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -56,16 +55,22 @@ private Handler handler;
                 String StatusQuery=taskArrayList.get(position).getStatus();
                 String BODYQuery=taskArrayList.get(position).getBody();
                 String UriImage=taskArrayList.get(position).getUriImage();
+Double locationLongitude=taskArrayList.get(position).getLocationLongitude();
+                Double locationLatitude=taskArrayList.get(position).getLocationLatitude();
+
                 Intent intent=new Intent(getApplicationContext(),TaskDetail.class);
                 intent.putExtra("task",titleQurey);
                 intent.putExtra("taskstate",StatusQuery);
                 intent.putExtra("taskBody",BODYQuery);
                 intent.putExtra("taskuri",UriImage);
+                intent.putExtra("locationLongitude",locationLongitude.toString());
+                intent.putExtra("locationLatitude",locationLatitude.toString());
                 startActivity(intent);
             });
             RecycleTask.setAdapter(recycleModels);
             RecycleTask.setHasFixedSize(true);
             RecycleTask.setLayoutManager(new LinearLayoutManager(this));
+
             return true;
 
         }

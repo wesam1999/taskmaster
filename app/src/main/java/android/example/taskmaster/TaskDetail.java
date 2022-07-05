@@ -5,15 +5,9 @@ import static android.net.Uri.fromFile;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationManager;
+import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,21 +21,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.predictions.models.LanguageType;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.bumptech.glide.Glide;
+
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -49,9 +34,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URI;
 
-public class TaskDetail extends AppCompatActivity  implements OnMapReadyCallback {
+public class TaskDetail extends AppCompatActivity {
 
     private static final String TAG = TaskDetail.class.getName();
     private final MediaPlayer mp = new MediaPlayer();
@@ -60,34 +44,6 @@ public class TaskDetail extends AppCompatActivity  implements OnMapReadyCallback
     private TextView textView3;
     private Uri uriImage;
 
-
-    // initializing
-    // FusedLocationProviderClient
-    // object
-    private FusedLocationProviderClient mFusedLocationClient;
-
-    private int PERMISSION_ID = 44;
-
-    private double latitude;
-    private double longitude;
-
-    private GoogleMap googleMap;
-
-    private Button toggle;
-
-    private final LocationCallback mLocationCallback = new LocationCallback() {
-
-        @Override
-        public void onLocationResult(LocationResult locationResult) {
-            Location mLastLocation = locationResult.getLastLocation();
-            LatLng coordinate = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-            googleMap.addMarker(new MarkerOptions()
-                    .position(coordinate)
-                    .title("Marker"));
-//            googleMap.moveCamera(CameraUpdateFactory.newLatLng(coordinate));
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(coordinate, 12.0f));
-        }
-    };
     private String taskuri;
     private ImageView imageView;
     private Handler handler= new Handler(
@@ -97,6 +53,7 @@ imageView.setImageURI(uriImage);
 
     }
     );
+    private InputStream data;
 
 
     @Override
@@ -110,7 +67,7 @@ imageView.setImageURI(uriImage);
         Button speech=findViewById(R.id.button8);
         Button Translating=findViewById(R.id.button9);
         imageView = findViewById(R.id.imageView3);
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+      TextView location=findViewById(R.id.textView9);
         ActionBar actionBar = getSupportActionBar();
 
 
@@ -118,29 +75,26 @@ imageView.setImageURI(uriImage);
 speech.setOnClickListener(view ->Text_to_speech() );
         Translating.setOnClickListener(view ->Text_to_Translating() );
 
-        // method to get the location
-        getLastLocation();
-
-
-        // Get a handle to the fragment and register the callback.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-
         Intent passedIntent = getIntent();
         String tasks = passedIntent.getStringExtra("task");
         String taskState = passedIntent.getStringExtra("taskstate");
         String taskBody = passedIntent.getStringExtra("taskBody");
 
         taskuri = passedIntent.getStringExtra("taskuri");
-
+        String locationLongitude = passedIntent.getStringExtra("locationLongitude");
+        String locationLatitude = passedIntent.getStringExtra("locationLatitude");
 
         textView.setText(tasks);
         textView2.setText(taskState);
         textView3.setText(taskBody);
-if (taskuri !=null) {
-    pictureDownload();
-}
+        location.setText("locationLongitude:"+locationLongitude+"locationLatitude:"+locationLatitude);
+
+
+    if (taskuri != null) {
+        setImage(taskuri);
+    }
+
+
 }
 
     private void Text_to_Translating() {
@@ -156,7 +110,23 @@ if (taskuri !=null) {
 
 
     }
+    private void setImage(String image) {
+        if(image != null) {
+            Amplify.Storage.downloadFile(
+                    image,
+                    new File(getApplicationContext().getFilesDir() + "/" + image + "download.jpg"),
+                    result -> {
+                        Log.i(TAG, "The root path is: " + getApplicationContext().getFilesDir());
+                        Log.i(TAG, "Successfully downloaded: " + result.getFile().getName());
 
+                        runOnUiThread(() -> {
+                            Glide.with(getApplicationContext()).load(result.getFile().getPath()).into(imageView);
+                        });
+                    },
+                    error -> Log.e(TAG, "Download Failure", error)
+            );
+        }
+    }
 
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -197,6 +167,7 @@ if (taskuri !=null) {
         startActivity(settingsIntent);
     }
 
+
     private void playAudio(InputStream data) {
         File mp3File = new File(getCacheDir(), "audio.mp3");
 
@@ -213,9 +184,7 @@ if (taskuri !=null) {
         } catch (IOException error) {
             Log.e("MyAmplifyApp", "Error writing audio file", error);
         }
-
     }
-
 public void Text_to_speech(){
     Amplify.Predictions.convertTextToSpeech(
             textView.getText().toString(),
@@ -223,152 +192,19 @@ public void Text_to_speech(){
             error -> Log.e("MyAmplifyApp", "Conversion failed", error)
     );
 
-    Amplify.Predictions.convertTextToSpeech(
-            textView2.getText().toString(),
-            result -> playAudio(result.getAudioData()),
-            error -> Log.e("MyAmplifyApp", "Conversion failed", error)
-    );
-    Amplify.Predictions.convertTextToSpeech(
-            textView3.getText().toString(),
-            result -> playAudio(result.getAudioData()),
-            error -> Log.e("MyAmplifyApp", "Conversion failed", error)
-    );
-
 }
 
 
-    @Override
-    public void onMapReady(@NonNull GoogleMap googleMap) {
-        this.googleMap = googleMap;
-        this.googleMap.setBuildingsEnabled(true);
-        this.googleMap.setTrafficEnabled(true);
-        this.googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-    }
+    private String downloadImage() {
 
-    @SuppressLint("MissingPermission")
-    private void getLastLocation() {
-        // check if permissions are given
-        if (checkPermissions()) {
-
-            // check if location is enabled
-            if (isLocationEnabled()) {
-
-                // getting last
-                // location from
-                // FusedLocationClient
-                // object
-                mFusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Location> task) {
-                        Location location = task.getResult();
-                        if (location == null) {
-                            requestNewLocationData();
-                        } else {
-                            latitude = location.getLatitude();
-                            longitude = location.getLongitude();
-
-                            LatLng coordinate = new LatLng(latitude, longitude);
-
-                            googleMap.addMarker(new MarkerOptions()
-                                    .position(coordinate)
-                                    .title("Marker"));
-
-//                            googleMap.moveCamera(CameraUpdateFactory.newLatLng(coordinate));
-                            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(coordinate, 12.0f));
-                        }
-                    }
-                });
-            } else {
-                Toast.makeText(this, "Please turn on" + " your location...", Toast.LENGTH_LONG).show();
-//                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-//                startActivity(intent);
-            }
-        } else {
-            // if permissions aren't available,
-            // request for permissions
-            requestPermissions();
-        }
-
-    }
-
-    @SuppressLint("MissingPermission")
-    private void requestNewLocationData() {
-
-        // Initializing LocationRequest
-        // object with appropriate methods
-        LocationRequest mLocationRequest = new LocationRequest();
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setInterval(5);
-        mLocationRequest.setFastestInterval(0);
-        mLocationRequest.setNumUpdates(1);
-
-        // setting LocationRequest
-        // on FusedLocationClient
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
-    }
-
-    // method to check for permissions
-    private boolean checkPermissions() {
-        return ActivityCompat
-                .checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) ==
-                PackageManager.PERMISSION_GRANTED
-                &&
-                ActivityCompat
-                        .checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) ==
-                        PackageManager.PERMISSION_GRANTED;
-
-        // If we want background location
-        // on Android 10.0 and higher,
-        // use:
-        // ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED
-    }
-
-    // method to request for permissions
-    private void requestPermissions() {
-        ActivityCompat.requestPermissions(this, new String[]{
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_ID);
-    }
-
-    // method to check
-    // if location is enabled
-    private boolean isLocationEnabled() {
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
-                locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-    }
-
-    // If everything is alright then
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (requestCode == PERMISSION_ID) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getLastLocation();
-            }
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (checkPermissions()) {
-            getLastLocation();
-        }
-    }
-    private void pictureDownload() {
         Amplify.Storage.downloadFile(
                 taskuri,
-                new File(getApplicationContext().getFilesDir() + "/download.jpg"),
-                result -> {
-                    uriImage = fromFile(result.getFile());
-                    handler.sendEmptyMessage(1);
-                    Log.i(TAG, "The root path is: " + getApplicationContext().getFilesDir());
-                    Log.i(TAG, "Successfully downloaded: " + result.getFile().getName());
+                new File(getApplication().getFilesDir(),"/"+taskuri+".jpg"),
+                success -> {
+                    imageView.setImageBitmap(BitmapFactory.decodeFile(success.getFile().getPath()));
                 },
                 error -> Log.e(TAG,  "Download Failure", error)
         );
+        return ""+getApplicationContext().getFilesDir();
     }
 }

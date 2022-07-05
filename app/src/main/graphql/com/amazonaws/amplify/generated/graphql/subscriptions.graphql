@@ -1,208 +1,28 @@
 # this is an auto generated file. This will be overwritten
-subscription OnCreateTask {
-  onCreateTask {
-    id
-    title
-    body
-    status
-    UriImage
-    createdAt
-    updatedAt
-    _version
-    _deleted
-    _lastChangedAt
-    teamListtasksId
-  }
-}
-subscription OnUpdateTask {
-  onUpdateTask {
-    id
-    title
-    body
-    status
-    UriImage
-    createdAt
-    updatedAt
-    _version
-    _deleted
-    _lastChangedAt
-    teamListtasksId
-  }
-}
-subscription OnDeleteTask {
-  onDeleteTask {
-    id
-    title
-    body
-    status
-    UriImage
-    createdAt
-    updatedAt
-    _version
-    _deleted
-    _lastChangedAt
-    teamListtasksId
-  }
-}
-subscription OnCreateTeam {
-  onCreateTeam {
+subscription OnCreateTodo {
+  onCreateTodo {
     id
     name
-    listtasks {
-      items {
-        id
-        title
-        body
-        status
-        UriImage
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        teamListtasksId
-      }
-      nextToken
-      startedAt
-    }
-    listusers {
-      items {
-        id
-        username
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        teamListusersId
-      }
-      nextToken
-      startedAt
-    }
+    description
     createdAt
     updatedAt
-    _version
-    _deleted
-    _lastChangedAt
   }
 }
-subscription OnUpdateTeam {
-  onUpdateTeam {
+subscription OnUpdateTodo {
+  onUpdateTodo {
     id
     name
-    listtasks {
-      items {
-        id
-        title
-        body
-        status
-        UriImage
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        teamListtasksId
-      }
-      nextToken
-      startedAt
-    }
-    listusers {
-      items {
-        id
-        username
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        teamListusersId
-      }
-      nextToken
-      startedAt
-    }
+    description
     createdAt
     updatedAt
-    _version
-    _deleted
-    _lastChangedAt
   }
 }
-subscription OnDeleteTeam {
-  onDeleteTeam {
+subscription OnDeleteTodo {
+  onDeleteTodo {
     id
     name
-    listtasks {
-      items {
-        id
-        title
-        body
-        status
-        UriImage
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        teamListtasksId
-      }
-      nextToken
-      startedAt
-    }
-    listusers {
-      items {
-        id
-        username
-        createdAt
-        updatedAt
-        _version
-        _deleted
-        _lastChangedAt
-        teamListusersId
-      }
-      nextToken
-      startedAt
-    }
+    description
     createdAt
     updatedAt
-    _version
-    _deleted
-    _lastChangedAt
-  }
-}
-subscription OnCreateUser {
-  onCreateUser {
-    id
-    username
-    createdAt
-    updatedAt
-    _version
-    _deleted
-    _lastChangedAt
-    teamListusersId
-  }
-}
-subscription OnUpdateUser {
-  onUpdateUser {
-    id
-    username
-    createdAt
-    updatedAt
-    _version
-    _deleted
-    _lastChangedAt
-    teamListusersId
-  }
-}
-subscription OnDeleteUser {
-  onDeleteUser {
-    id
-    username
-    createdAt
-    updatedAt
-    _version
-    _deleted
-    _lastChangedAt
-    teamListusersId
   }
 }

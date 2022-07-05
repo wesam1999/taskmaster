@@ -3,10 +3,14 @@
   "serviceConfiguration": {
     "apiName": "taskmaster",
     "serviceName": "AppSync",
-    "gqlSchemaPath": "C:\\Users\\iaz\\AndroidStudioProjects\\Taskmaster\\amplify\\backend\\api\\taskmaster\\schema.graphql",
+    "gqlSchemaPath": "D:\\taskmaster\\amplify\\backend\\api\\taskmaster\\schema.graphql",
     "defaultAuthType": {
       "mode": "API_KEY",
-      "expirationTime": 7
-    }
+      "expirationTime": 50,
+      "apiKeyExpirationDate": "2022-08-22T11:49:31.777Z",
+      "keyDescription": "taskmaster1"
+    },
+    "conflictResolution": {},
+    "additionalAuthTypes": []
   }
 }
