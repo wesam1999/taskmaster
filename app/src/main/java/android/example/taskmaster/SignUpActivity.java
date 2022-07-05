@@ -56,7 +56,7 @@ public class SignUpActivity extends AppCompatActivity {
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadingProgressBar.setVisibility(View.VISIBLE);
+//                loadingProgressBar.setVisibility(View.VISIBLE);
 
                 signUp(usernameEditText.getText().toString(),
                         passwordEditText.getText().toString());
@@ -75,7 +75,7 @@ public class SignUpActivity extends AppCompatActivity {
         Amplify.Auth.signUp(email, password, options,
                 result -> {
                     Log.i(TAG, "Result: " + result.toString());
-                    loadingProgressBar.setVisibility(View.INVISIBLE);
+//                    loadingProgressBar.setVisibility(View.INVISIBLE);
 
                     Intent intent = new Intent(SignUpActivity.this, VerificationActivity.class);
                     intent.putExtra(EMAIL, email);

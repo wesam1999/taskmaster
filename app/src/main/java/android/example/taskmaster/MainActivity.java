@@ -67,22 +67,36 @@ private Handler handler;
         Button Banner =findViewById(R.id.button5);
         Button Interstitial  =findViewById(R.id.button6);
         Button Rewarded  =findViewById(R.id.button7);
-//        AnalyticsEvent event = AnalyticsEvent.builder()
-//                .name("opendMyApplication")
-//                .addProperty("Successful", true)
-//                .addProperty("ProcessDuration", 792)
-//                .build();
+        AnalyticsEvent event = AnalyticsEvent.builder()
+                .name("opendMyApplication")
+                .addProperty("Successful", true)
+                .addProperty("ProcessDuration", 792)
+                .build();
+
+        Amplify.Analytics.recordEvent(event);
+
+
+//Team team=Team.builder()
 //
-//        Amplify.Analytics.recordEvent(event);
-
-
-
+//        .name("team3")
+//        .build();
+//
+//        Amplify.API.mutate(
+//                ModelMutation.create(team),
+//                response -> {
+//                    Log.i(TAG, "onCreate: team name:"+response.getData().getName());
+////                    Log.i("MyAmplifyApp", "Added Todo with id: " + response.getData().getName());
+//
+//
+//                },
+//                error -> Log.e("MyAmplifyApp", "Create failed", error)
+//        );
 
 
         Banner.setOnClickListener(view -> createBanner());
         Interstitial.setOnClickListener(view -> createInterstitial());
         Rewarded.setOnClickListener(view -> createRewarded());
-email.setText(getCurrentValue());
+//email.setText(getCurrentValue());
 clickButton.setOnClickListener(view -> {
     Intent startSecondActivityIntent = new Intent(this, AddTask.class);
     startActivity(startSecondActivityIntent);
@@ -287,9 +301,9 @@ clickButton2.setOnClickListener(view -> {
     }
     String getCurrentValue(){
         AuthUser authUser=Amplify.Auth.getCurrentUser();
-        Log.e("getCurrentUser", authUser.toString());
-        Log.e("getCurrentUser", authUser.getUserId());
-        Log.e("getCurrentUser", authUser.getUsername());
+//        Log.e("getCurrentUser", authUser.toString());
+//        Log.e("getCurrentUser", authUser.getUserId());
+//        Log.e("getCurrentUser", authUser.getUsername());
         return authUser.getUsername();
     }
 }

@@ -8,6 +8,8 @@ type Task @model {
   body: String
   status: String
 UriImage :String
+locationLongitude:Float
+  locationLatitude:Float
 }
 
 type Team @model {

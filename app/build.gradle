@@ -54,13 +54,12 @@ dependencies {
 
 
     // for AWS account amplify
+
     implementation 'com.amplifyframework:aws-storage-s3:1.35.4'
     implementation 'com.amplifyframework:aws-api:1.35.3'
     implementation 'com.amplifyframework:aws-datastore:1.35.3'
     implementation 'com.amplifyframework:aws-auth-cognito:1.35.4'
-
     implementation 'com.amplifyframework:aws-predictions:1.35.4'
-
     implementation 'com.amplifyframework:aws-analytics-pinpoint:1.35.4'
 
 
@@ -75,6 +74,11 @@ dependencies {
     annotationProcessor "androidx.room:room-compiler:2.4.2"
 
     androidTestImplementation 'androidx.test:rules:1.4.0'
+
+    // Product
+    implementation 'com.github.bumptech.glide:glide:4.13.0'
+
+    implementation 'com.vmadalin:easypermissions-ktx:1.0.0'
 
 
 }
